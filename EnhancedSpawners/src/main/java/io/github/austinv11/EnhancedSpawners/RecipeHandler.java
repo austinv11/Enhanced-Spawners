@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -70,23 +71,41 @@ public class RecipeHandler implements Listener{
 			event.setCancelled(true);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityInteract(PlayerInteractEntityEvent event){
-		if (event.getPlayer().getItemInHand() == infusedEgg){
-			event.setCancelled(true);
-			List<String> spawnLore = new ArrayList<String>();
-			spawnLore.add("This egg contains the spirit of a "+event.getRightClicked().toString());
-			spawnEgg = new ItemStack(Material.MONSTER_EGG);
-			ItemMeta spawnMeta = spawnEgg.getItemMeta();
-			spawnMeta.setDisplayName("Attuned Egg ("+event.getRightClicked().toString()+")");
-			spawnMeta.setLore(spawnLore);
-			spawnEgg.setItemMeta(spawnMeta);
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerInteract(PlayerInteractEvent event){
+		if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (")){
+			Player player = event.getPlayer();
+			int amount = player.getItemInHand().getAmount();
+			player.getItemInHand().setAmount(amount-1);
+			BlockState state = event.getClickedBlock().getState();
+			CreatureSpawner spawner = (CreatureSpawner) state;
+			String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
+			spawner.setCreatureTypeByName(mobName);
+			spawner.update();
+			player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onInteract(PlayerInteractEvent event){
-		if (event.getPlayer().getItemInHand() == infusedEgg || event.getPlayer().getItemInHand() == temperedEgg || event.getPlayer().getItemInHand() == spawnEgg){
-			event.setCancelled(true);
+	public void onEntityDamage(EntityDamageByEntityEvent event){
+		if (event.getDamager().getType() == EntityType.PLAYER){
+			Player player = (Player) event.getDamager();
+			if (player.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY) == 1 && player.getItemInHand().getItemMeta().getDisplayName().contains("Infused Egg")){
+				List<String> spawnLore = new ArrayList<String>();
+				spawnLore.add("This egg contains the spirit of a "+event.getEntityType().toString());
+				spawnEgg = new ItemStack(Material.MONSTER_EGG);
+				ItemMeta spawnMeta = spawnEgg.getItemMeta();
+				spawnMeta.setDisplayName("Attuned Egg ("+event.getEntityType().toString()+")");
+				spawnMeta.setLore(spawnLore);
+				spawnEgg.setItemMeta(spawnMeta);
+				int amount = player.getItemInHand().getAmount();
+				if (amount == 1){
+					player.setItemInHand(spawnEgg);
+				}else{
+					player.getItemInHand().setAmount(amount-1);
+					player.getInventory().addItem(spawnEgg);
+				}
+				event.getEntity().remove();
+			}
 		}
 	}
 }
