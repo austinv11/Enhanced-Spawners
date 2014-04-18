@@ -1,0 +1,23 @@
+name: EnhancedSpawners
+version: 1.0.0-SNAPSHOT
+description: A plugin which enhances spawners in various ways
+author: austinv11
+website: austinv11.github.io
+ 
+main: io.github.austinv11.EnhancedSpawners.EnhancedSpawners
+commands:
+   tweaks:
+      description: Displays the tweaks implemented by LootPlus on the server
+      usage: /<command>
+      permission: EnhancedSpawners.tweaks
+      permission-message: You don't have permission
+      aliases: [tweak, change, changes]
+
+permissions:
+   EnhancedSpawners.*:
+        description: Gives access to all LootPlus commands
+        children:
+            EnhancedSpawners.tweaks: true
+   EnhancedSpawners.tweaks:
+      description: Displays the tweaks implemented by LootPlus on the server
+      default: true
