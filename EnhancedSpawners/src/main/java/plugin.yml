@@ -6,18 +6,18 @@ website: austinv11.github.io
  
 main: io.github.austinv11.EnhancedSpawners.EnhancedSpawners
 commands:
-   spawner-list:
-      description: Displays all the possible entities for spawners
-      usage: /<command>
-      permission: EnhancedSpawners.spawner-list
+   set-delay:
+      description: Sets the delay of the spawner you are looking at
+      usage: /<command> <delay (number)>
+      permission: EnhancedSpawners.set-delay
       permission-message: You don't have permission
-      aliases: [spawnerlist, spawn-list, spawnlist]
+      aliases: [setdelay]
 
 permissions:
    EnhancedSpawners.*:
         description: Gives access to all LootPlus commands
         children:
-            EnhancedSpawners.spawner-list: true
-   EnhancedSpawners.spawner-list:
-      description: Displays the tweaks implemented by LootPlus on the server
-      default: true
+            EnhancedSpawners.spawner-list: op
+   EnhancedSpawners.set-delay:
+      description: Sets the delay of the spawner you are looking at
+      default: op
