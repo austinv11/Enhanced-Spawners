@@ -22,3 +22,5 @@ Planned Features
 * Toggling spawners with redstone
 
 * Crafting spawn eggs (or making Attuned Eggs spawn eggs)
+
+* More permissions
