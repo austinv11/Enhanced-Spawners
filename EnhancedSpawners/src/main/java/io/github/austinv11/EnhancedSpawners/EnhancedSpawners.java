@@ -47,16 +47,16 @@ public class EnhancedSpawners extends JavaPlugin{
 			config.addDefault("Options.autoUpdater", true);
 			config.addDefault("Options.mcstatsDataCollection", true);
 			config.addDefault("Options.setToDefault", false);
-			//config.addDefault("Features.changeSpawners", true);
-			//config.addDefault("Features.silkTouchSpawners", true);
+			config.addDefault("Features.changeSpawners", true);
+			config.addDefault("Features.silkTouchSpawners", true);
 			config.options().copyDefaults(true);
 			saveConfig();
 		}else{
 			config.set("Options.autoUpdater", true);
 			config.set("Options.mcstatsDataCollection", true);
 			config.set("Options.setToDefault", false);
-			//config.set("Features.changeSpawners", true);
-			//config.set("Features.silkTouchSpawners", true);
+			config.set("Features.changeSpawners", true);
+			config.set("Features.silkTouchSpawners", true);
 			saveConfig();
 		}
 	}
@@ -68,7 +68,7 @@ public class EnhancedSpawners extends JavaPlugin{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("set-delay")){
-			if (sender.isOp() && args.length == 1){
+			if (sender.hasPermission("set-delay") && args.length == 1){
 				Player player = (Player) sender;
 				if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
 					BlockState state = player.getTargetBlock(null, 10).getState();//FIXME non-deprecated method
@@ -86,7 +86,7 @@ public class EnhancedSpawners extends JavaPlugin{
 				return false;
 			}
 		}else if (cmd.getName().equalsIgnoreCase("set-mob")){
-			if (sender.isOp() && args.length == 1){
+			if (sender.hasPermission("set-mob") && args.length == 1){
 				Player player = (Player) sender;
 				if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
 					BlockState state = player.getTargetBlock(null, 10).getState();//FIXME non-deprecated method
