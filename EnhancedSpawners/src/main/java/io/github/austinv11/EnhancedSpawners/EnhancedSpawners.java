@@ -25,14 +25,14 @@ public class EnhancedSpawners extends JavaPlugin{
 	public void configInit(boolean revert){
 		if (revert == false){
 			config.addDefault("Options.setToDefault", false);
-			config.addDefault("Features.changeSpawners", true);
-			config.addDefault("Features.silkTouchSpawners", true);
+			//config.addDefault("Features.changeSpawners", true);
+			//config.addDefault("Features.silkTouchSpawners", true);
 			config.options().copyDefaults(true);
 			saveConfig();
 		}else{
 			config.set("Options.setToDefault", false);
-			config.set("Features.changeSpawners", true);
-			config.set("Features.silkTouchSpawners", true);
+			//config.set("Features.changeSpawners", true);
+			//config.set("Features.silkTouchSpawners", true);
 			saveConfig();
 		}
 	}
