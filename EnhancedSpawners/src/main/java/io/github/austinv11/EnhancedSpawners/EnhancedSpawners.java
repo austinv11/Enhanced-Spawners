@@ -1,5 +1,7 @@
 package io.github.austinv11.EnhancedSpawners;
 
+import net.gravitydevelopment.updater.Updater;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -12,24 +14,34 @@ import org.bukkit.entity.Player;
 
 public class EnhancedSpawners extends JavaPlugin{
 	String CURRENT_VERSION = "1.0.0"; //TODO remember to update
+	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
+	int id = 78473;
 	@Override
 	public void onEnable(){
 		configInit(false);
 		if (config.getBoolean("Options.setToDefault") == true){
 			configInit(true);
 		}
+		if (config.getBoolean("Options.autoUpdater") == true){
+			Updater updater = new Updater(this, id, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+			if (updater.getLatestGameVersion() == CURRENT_GAME_VERSION){
+				Updater updaterAuto = new Updater(this, id, this.getFile(), Updater.UpdateType.DEFAULT, true);
+			}
+		}
 		new RecipeHandler(this);
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
 	public void configInit(boolean revert){
 		if (revert == false){
+			config.addDefault("Options.autoUpdater", true);
 			config.addDefault("Options.setToDefault", false);
 			//config.addDefault("Features.changeSpawners", true);
 			//config.addDefault("Features.silkTouchSpawners", true);
 			config.options().copyDefaults(true);
 			saveConfig();
 		}else{
+			config.set("Options.autoUpdater", true);
 			config.set("Options.setToDefault", false);
 			//config.set("Features.changeSpawners", true);
 			//config.set("Features.silkTouchSpawners", true);
