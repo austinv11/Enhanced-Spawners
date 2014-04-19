@@ -11,13 +11,23 @@ commands:
       usage: /<command> <delay (number)>
       permission: EnhancedSpawners.set-delay
       permission-message: You don't have permission
-      aliases: [setdelay]
+      aliases: [setdelay, delay-set, delayset]
+   set-mob:
+      description: Sets mob of the spawner you are looking at
+      usage: /<command> <mob>
+      permission: EnhancedSpawners.set-delay
+      permission-message: You don't have permission
+      aliases: [setmob, mob-set, mobset]
 
 permissions:
    EnhancedSpawners.*:
         description: Gives access to all LootPlus commands
         children:
-            EnhancedSpawners.spawner-list: op
+            EnhancedSpawners.set-delay: op
+            EnhancedSpawners.set-mob: op
    EnhancedSpawners.set-delay:
       description: Sets the delay of the spawner you are looking at
+      default: op
+   EnhancedSpawners.set-mob:
+      description: Sets mob of the spawner you are looking at
       default: op

@@ -81,10 +81,10 @@ public class RecipeHandler implements Listener{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
 		if (event.getBlock().getType() == Material.MOB_SPAWNER){
+			Location loc = event.getBlock().getLocation().clone();
 			Player player = event.getPlayer();
 			if (player.getItemInHand().getEnchantmentLevel(Enchantment.SILK_TOUCH) != 0){
 				event.setExpToDrop(0);
-				Location loc = event.getBlock().getLocation().clone();
 				CreatureSpawner spawnr = (CreatureSpawner) event.getBlock().getState();
 				String mobName = spawnr.getCreatureTypeName();
 				spawner = new ItemStack(Material.MOB_SPAWNER);

@@ -1,12 +1,15 @@
 package io.github.austinv11.EnhancedSpawners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -42,10 +45,33 @@ public class EnhancedSpawners extends JavaPlugin{
 		if (cmd.getName().equalsIgnoreCase("set-delay")){
 			if (sender.isOp() && args.length == 1){
 				Player player = (Player) sender;
-				BlockState state = player.getTargetBlock(null, 10).getState();
-				CreatureSpawner spawner = (CreatureSpawner) state;
-				spawner.setDelay(Integer.parseInt(args[0]));
-				spawner.update();
+				if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
+					BlockState state = player.getTargetBlock(null, 10).getState();//FIXME non-deprecated method
+					CreatureSpawner spawner = (CreatureSpawner) state;
+					spawner.setDelay(Integer.parseInt(args[0]));
+					spawner.update();
+					Location loc = player.getTargetBlock(null, 10).getLocation().clone();
+				}else{
+					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");
+				}
+				return true;
+			}else if (!(sender.isOp())){
+				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
+				return true;
+			}else{
+				return false;
+			}
+		}else if (cmd.getName().equalsIgnoreCase("set-mob")){
+			if (sender.isOp() && args.length == 1){
+				Player player = (Player) sender;
+				if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
+					BlockState state = player.getTargetBlock(null, 10).getState();//FIXME non-deprecated method
+					CreatureSpawner spawner = (CreatureSpawner) state;
+					spawner.setCreatureTypeByName(args[0].toUpperCase());
+					spawner.update();
+				}else{
+					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");
+				}
 				return true;
 			}else if (!(sender.isOp())){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
