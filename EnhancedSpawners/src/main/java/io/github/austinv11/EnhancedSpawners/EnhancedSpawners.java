@@ -1,7 +1,6 @@
 package io.github.austinv11.EnhancedSpawners;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -9,14 +8,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class EnhancedSpawners extends JavaPlugin{
 	String CURRENT_VERSION = "1.0.0"; //TODO remember to update
 	FileConfiguration config = getConfig();
-	String[] entities = {"hello", "world"}; //TODO update
 	@Override
 	public void onEnable(){
 		configInit(false);
@@ -29,10 +25,14 @@ public class EnhancedSpawners extends JavaPlugin{
 	public void configInit(boolean revert){
 		if (revert == false){
 			config.addDefault("Options.setToDefault", false);
+			config.addDefault("Features.changeSpawners", true);
+			config.addDefault("Features.silkTouchSpawners", true);
 			config.options().copyDefaults(true);
 			saveConfig();
 		}else{
 			config.set("Options.setToDefault", false);
+			config.set("Features.changeSpawners", true);
+			config.set("Features.silkTouchSpawners", true);
 			saveConfig();
 		}
 	}
@@ -40,6 +40,7 @@ public class EnhancedSpawners extends JavaPlugin{
 	public void onDisable(){
 		getLogger().info("Baby come back!");
 	}
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("set-delay")){
@@ -50,7 +51,6 @@ public class EnhancedSpawners extends JavaPlugin{
 					CreatureSpawner spawner = (CreatureSpawner) state;
 					spawner.setDelay(Integer.parseInt(args[0]));
 					spawner.update();
-					Location loc = player.getTargetBlock(null, 10).getLocation().clone();
 				}else{
 					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");
 				}
