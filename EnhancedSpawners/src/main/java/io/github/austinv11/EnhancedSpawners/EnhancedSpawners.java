@@ -1,5 +1,7 @@
 package io.github.austinv11.EnhancedSpawners;
 
+import java.io.IOException;
+
 import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.ChatColor;
@@ -30,11 +32,20 @@ public class EnhancedSpawners extends JavaPlugin{
 			}
 		}
 		new RecipeHandler(this);
+		if (config.getBoolean("Options.mcstatsDataCollection") == true){
+			try {
+			    MetricsLite metrics = new MetricsLite(this);
+			    metrics.start();
+			} catch (IOException e) {
+			    getLogger().severe("Failed to connect to mcstats.org");
+			}
+		}
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
 	public void configInit(boolean revert){
 		if (revert == false){
 			config.addDefault("Options.autoUpdater", true);
+			config.addDefault("Options.mcstatsDataCollection", true);
 			config.addDefault("Options.setToDefault", false);
 			//config.addDefault("Features.changeSpawners", true);
 			//config.addDefault("Features.silkTouchSpawners", true);
@@ -42,6 +53,7 @@ public class EnhancedSpawners extends JavaPlugin{
 			saveConfig();
 		}else{
 			config.set("Options.autoUpdater", true);
+			config.set("Options.mcstatsDataCollection", true);
 			config.set("Options.setToDefault", false);
 			//config.set("Features.changeSpawners", true);
 			//config.set("Features.silkTouchSpawners", true);
