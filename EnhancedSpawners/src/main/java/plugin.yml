@@ -1,5 +1,5 @@
 name: EnhancedSpawners
-version: 1.0.0-SNAPSHOT
+version: 1.1.0
 description: A plugin which enhances spawners in various ways
 author: austinv11
 website: austinv11.github.io
@@ -26,3 +26,6 @@ permissions:
       description: Sets the delay of the spawner you are looking at
    EnhancedSpawners.set-mob:
       description: Sets mob of the spawner you are looking at
+   EnhancedSpawners.silkySpawners:
+      description: Allows for silk touching spawners
+      default: true

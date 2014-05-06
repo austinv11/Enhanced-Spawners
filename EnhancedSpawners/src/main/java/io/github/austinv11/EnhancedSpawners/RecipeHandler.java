@@ -85,7 +85,7 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
-		if (plugin.getConfig().getBoolean("Features.silkTouchSpawners") == true){
+		if (plugin.getConfig().getBoolean("Features.silkTouchSpawners") == true && event.getPlayer().hasPermission("EnhancedSpawners.silkySpawners")){
 			if (event.getBlock().getType() == Material.MOB_SPAWNER){
 				Location loc = event.getBlock().getLocation().clone();
 				Player player = event.getPlayer();
