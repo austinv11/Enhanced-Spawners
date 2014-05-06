@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
 
 public class EnhancedSpawners extends JavaPlugin{
-	String CURRENT_VERSION = "1.0.0"; //TODO remember to update
+	String CURRENT_VERSION = "1.1.0"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	int id = 78473;
