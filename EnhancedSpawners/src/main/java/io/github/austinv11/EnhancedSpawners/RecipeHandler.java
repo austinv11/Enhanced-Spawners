@@ -140,8 +140,6 @@ public class RecipeHandler implements Listener{
 					player.getItemInHand().setAmount(amount-1);
 				}
 				player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
-			}else{
-				//NOTHING
 			}
 		}
 		if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
@@ -153,6 +151,8 @@ public class RecipeHandler implements Listener{
 				int amount = player.getItemInHand().getAmount();
 				if (mobLoc != null){
 					mobLoc.getWorld().spawnEntity(mobLoc, EntityType.valueOf(mobName.toUpperCase()));
+					mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
+					mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
 					if (amount == 1){
 						ItemStack clear = new ItemStack (Material.AIR);
 						player.setItemInHand(clear);
