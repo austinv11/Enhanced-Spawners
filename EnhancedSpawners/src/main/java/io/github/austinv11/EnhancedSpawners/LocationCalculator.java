@@ -33,9 +33,9 @@ public class LocationCalculator {
 		}
 	}
 	public Location spawnerSearch(Location loc){
-		for (double i = 0; i <= 4; i++){ //Y
-			for (double j = 0; j <= 10; j++){ //Z
-				for (double k = 0; k <= 10; k++){ //X
+		for (int i = 0; i <= 4; i++){ //Y
+			for (int j = 0; j <= 10; j++){ //Z
+				for (int k = 0; k <= 10; k++){ //X
 					double x, y, z;
 					x = loc.getX();
 					y = loc.getY();

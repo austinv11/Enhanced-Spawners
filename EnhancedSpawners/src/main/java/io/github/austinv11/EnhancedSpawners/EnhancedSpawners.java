@@ -79,10 +79,9 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent event){
-		fileHandler.addDefault(loginLogger, "firstTime."+event.getPlayer().getName(), "true");
-		String result = fileHandler.getString(loginLogger, "firstTime."+event.getPlayer().getName());
-		if (result != "false"){
-			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), "false");
+		boolean result = fileHandler.getBoolean(loginLogger, "firstTime."+event.getPlayer().getName());
+		if (result != true){
+			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), true);
 			event.getPlayer().sendMessage("Welcome to the server! This server has EnhancedSpawners installed! Visit http://bit.ly/1kN4UZO for info about it.");
 		}
 	}

@@ -122,7 +122,7 @@ public class RecipeHandler implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if (plugin.getConfig().getBoolean("Features.changeSpawners") == true){
-			if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (")){
+			if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getPlayer().getItemInHand().getType() == Material.EGG){
 				Player player = event.getPlayer();
 				BlockState state = event.getClickedBlock().getState();
 				CreatureSpawner spawner = (CreatureSpawner) state;
@@ -144,7 +144,7 @@ public class RecipeHandler implements Listener{
 			}
 		}
 		if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
-			if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.EGG){
 				Player player = event.getPlayer();
 				String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
 				Location eLoc = event.getClickedBlock().getLocation().clone();
@@ -197,10 +197,11 @@ public class RecipeHandler implements Listener{
 	public void onCreatureSpawn(CreatureSpawnEvent event){
 		if (plugin.getConfig().getBoolean("Features.redstoneToggle(EXP)") == true){
 			if (event.getSpawnReason() == SpawnReason.SPAWNER){
-				Location spawnerLoc = lC.spawnerSearch(event.getEntity().getLocation());
+				Location spawnerLoc = lC.spawnerSearch(event.getEntity().getLocation().clone());
 				if (spawnerLoc != null){
+					plugin.getLogger().info("Spawner found!");
 					int rsPower = spawnerLoc.getBlock().getBlockPower();
-					if (rsPower > 0){
+					if (rsPower != 0){
 						event.setCancelled(true);
 					}
 				}
