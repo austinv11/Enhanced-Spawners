@@ -18,6 +18,7 @@ public class EnhancedSpawners extends JavaPlugin{
 	String CURRENT_VERSION = "1.1.0"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
+	FileHandler fileHandler;
 	int id = 78473;
 	@Override
 	public void onEnable(){
@@ -40,6 +41,7 @@ public class EnhancedSpawners extends JavaPlugin{
 			    getLogger().severe("Failed to connect to mcstats.org");
 			}
 		}
+		fileHandler = new FileHandler(config);
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
 	public void configInit(boolean revert){
