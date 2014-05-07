@@ -14,13 +14,13 @@ Current Features
 
 * You can customize a spawner as an admin
 
+* Toggling spawners with redstone (Experimental!)
+
+* Crafting spawn eggs ('Attuned Eggs' act as spawn eggs)
+
 Planned Features
 ----------------
 
-* Config options
-
-* Toggling spawners with redstone
-
-* Crafting spawn eggs (or making Attuned Eggs spawn eggs)
+* More config options
 
 * More permissions
