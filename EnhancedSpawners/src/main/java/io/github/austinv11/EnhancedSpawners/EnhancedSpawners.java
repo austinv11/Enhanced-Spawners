@@ -50,6 +50,7 @@ public class EnhancedSpawners extends JavaPlugin{
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
 			config.addDefault("Features.attunedEggsEqualSpawnEggs", true);
+			config.addDefault("Features.redstoneToggle(EXP)", false);
 			config.options().copyDefaults(true);
 			saveConfig();
 		}else{
@@ -59,6 +60,7 @@ public class EnhancedSpawners extends JavaPlugin{
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
 			config.set("Features.attunedEggsEqualSpawnEggs", true);
+			config.set("Features.redstoneToggle(EXP)", false);
 			saveConfig();
 		}
 	}

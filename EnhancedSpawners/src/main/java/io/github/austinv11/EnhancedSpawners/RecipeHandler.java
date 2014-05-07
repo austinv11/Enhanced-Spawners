@@ -11,14 +11,15 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.block.Action;
@@ -188,6 +189,20 @@ public class RecipeHandler implements Listener{
 					event.getEntity().remove();
 					event.getEntity().getWorld().playSound(eLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
 					player.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 0);
+				}
+			}
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onCreatureSpawn(CreatureSpawnEvent event){
+		if (plugin.getConfig().getBoolean("Features.redstoneToggle(EXP)") == true){
+			if (event.getSpawnReason() == SpawnReason.SPAWNER){
+				Location spawnerLoc = lC.spawnerSearch(event.getEntity().getLocation());
+				if (spawnerLoc != null){
+					int rsPower = spawnerLoc.getBlock().getBlockPower();
+					if (rsPower > 0){
+						event.setCancelled(true);
+					}
 				}
 			}
 		}
