@@ -1,5 +1,6 @@
 package io.github.austinv11.EnhancedSpawners;
 
+import java.io.File;
 import java.io.IOException;
 
 import net.gravitydevelopment.updater.Updater;
@@ -13,12 +14,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
-public class EnhancedSpawners extends JavaPlugin{
+public class EnhancedSpawners extends JavaPlugin implements Listener{
 	String CURRENT_VERSION = "1.1.0"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
+	File loginLogger = new File(getDataFolder(), "Data//loginTracker.yml");
 	int id = 78473;
 	@Override
 	public void onEnable(){
@@ -42,6 +48,7 @@ public class EnhancedSpawners extends JavaPlugin{
 			}
 		}
 		fileHandler = new FileHandler(config);
+		this.getServer().getPluginManager().registerEvents(this, this);
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
 	public void configInit(boolean revert){
@@ -69,6 +76,15 @@ public class EnhancedSpawners extends JavaPlugin{
 	@Override
 	public void onDisable(){
 		getLogger().info("Baby come back!");
+	}
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerJoin(PlayerJoinEvent event){
+		fileHandler.addDefault(loginLogger, "firstTime."+event.getPlayer().getName(), "true");
+		String result = fileHandler.getString(loginLogger, "firstTime."+event.getPlayer().getName());
+		if (result != "false"){
+			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), "false");
+			event.getPlayer().sendMessage("Welcome to the server! This server has EnhancedSpawners installed! Visit http://bit.ly/1kN4UZO for info about it.");
+		}
 	}
 	@SuppressWarnings("deprecation")
 	@Override
