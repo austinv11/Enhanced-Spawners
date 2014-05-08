@@ -144,7 +144,7 @@ public class RecipeHandler implements Listener{
 			}
 		}
 		if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
-			if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.EGG){
+			if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.EGG){
 				Player player = event.getPlayer();
 				String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
 				Location eLoc = event.getClickedBlock().getLocation().clone();
