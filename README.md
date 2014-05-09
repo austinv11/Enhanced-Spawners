@@ -21,6 +21,8 @@ Current Features
 Planned Features
 ----------------
 
+* Rewrite spawner mechanics (this'll be a toughie :P) to implement custom features (inlcuding a working ability to toggle spawners with redstone)
+
 * More config options
 
 * More permissions
