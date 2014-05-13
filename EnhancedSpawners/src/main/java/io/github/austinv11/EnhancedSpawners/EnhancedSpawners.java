@@ -20,7 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EnhancedSpawners extends JavaPlugin implements Listener{
-	String CURRENT_VERSION = "1.1.0"; //TODO remember to update
+	String CURRENT_VERSION = "1.1.1"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
