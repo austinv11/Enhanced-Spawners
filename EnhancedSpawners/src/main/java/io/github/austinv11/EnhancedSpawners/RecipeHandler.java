@@ -121,44 +121,46 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if (plugin.getConfig().getBoolean("Features.changeSpawners") == true){
-			if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getPlayer().getItemInHand().getType() == Material.EGG){
-				Player player = event.getPlayer();
-				BlockState state = event.getClickedBlock().getState();
-				CreatureSpawner spawner = (CreatureSpawner) state;
-				String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
-				spawner.setCreatureTypeByName(mobName);
-				spawner.update();
-				Location eLoc = event.getClickedBlock().getLocation().clone();
-				eLoc.setY(event.getClickedBlock().getLocation().getY() + 1);
-				event.getClickedBlock().getWorld().playSound(eLoc, Sound.ANVIL_LAND, 10, 1);//TODO change sound
-				event.getClickedBlock().getWorld().playEffect(eLoc, Effect.ENDER_SIGNAL, 0);
-				int amount = player.getItemInHand().getAmount();
-				if (amount == 1){
-					ItemStack clear = new ItemStack (Material.AIR);
-					player.setItemInHand(clear);
-				}else{
-					player.getItemInHand().setAmount(amount-1);
-				}
-				player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
-			}
-		}
-		if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
-			if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.EGG){
-				Player player = event.getPlayer();
-				String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
-				Location eLoc = event.getClickedBlock().getLocation().clone();
-				Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
-				int amount = player.getItemInHand().getAmount();
-				if (mobLoc != null){
-					mobLoc.getWorld().spawnEntity(mobLoc, EntityType.valueOf(mobName.toUpperCase()));
-					mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
-					mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
+		if (event.getPlayer().getItemInHand() != null && event.getClickedBlock() != null && event.getPlayer().getItemInHand().getItemMeta() != null){
+			if (plugin.getConfig().getBoolean("Features.changeSpawners") == true){
+				if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getPlayer().getItemInHand().getType() == Material.EGG){
+					Player player = event.getPlayer();
+					BlockState state = event.getClickedBlock().getState();
+					CreatureSpawner spawner = (CreatureSpawner) state;
+					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
+					spawner.setCreatureTypeByName(mobName);
+					spawner.update();
+					Location eLoc = event.getClickedBlock().getLocation().clone();
+					eLoc.setY(event.getClickedBlock().getLocation().getY() + 1);
+					event.getClickedBlock().getWorld().playSound(eLoc, Sound.ANVIL_LAND, 10, 1);//TODO change sound
+					event.getClickedBlock().getWorld().playEffect(eLoc, Effect.ENDER_SIGNAL, 0);
+					int amount = player.getItemInHand().getAmount();
 					if (amount == 1){
 						ItemStack clear = new ItemStack (Material.AIR);
 						player.setItemInHand(clear);
 					}else{
 						player.getItemInHand().setAmount(amount-1);
+					}
+					player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
+				}
+			}
+			if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
+				if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.EGG){
+					Player player = event.getPlayer();
+					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
+					Location eLoc = event.getClickedBlock().getLocation().clone();
+					Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
+					int amount = player.getItemInHand().getAmount();
+					if (mobLoc != null){
+						mobLoc.getWorld().spawnEntity(mobLoc, EntityType.valueOf(mobName.toUpperCase()));
+						mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
+						mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
+						if (amount == 1){
+							ItemStack clear = new ItemStack (Material.AIR);
+							player.setItemInHand(clear);
+						}else{
+							player.getItemInHand().setAmount(amount-1);
+						}
 					}
 				}
 			}
