@@ -121,8 +121,8 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if (event.getPlayer().getItemInHand() != null && event.getClickedBlock() != null && event.getPlayer().getItemInHand().getItemMeta() != null){
-			if (plugin.getConfig().getBoolean("Features.changeSpawners") == true){
+		if (event.getPlayer().getItemInHand() != null && event.getClickedBlock() != null && event.getPlayer().getItemInHand().hasItemMeta()){
+			if (plugin.getConfig().getBoolean("Features.changeSpawners") == true && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()){
 				if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG){
 					Player player = event.getPlayer();
 					BlockState state = event.getClickedBlock().getState();
@@ -142,10 +142,11 @@ public class RecipeHandler implements Listener{
 						player.getItemInHand().setAmount(amount-1);
 					}
 					player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
+					return;
 				}
 			}
-			if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true){
-				if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG){
+			if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getClickedBlock().getType() != Material.MOB_SPAWNER){
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG){
 					Player player = event.getPlayer();
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
 					Location eLoc = event.getClickedBlock().getLocation().clone();
@@ -201,7 +202,7 @@ public class RecipeHandler implements Listener{
 			if (event.getSpawnReason() == SpawnReason.SPAWNER){
 				Location spawnerLoc = lC.spawnerSearch(event.getEntity().getLocation().clone());
 				if (spawnerLoc != null){
-					plugin.getLogger().info("Spawner found!");
+					//plugin.getLogger().info("Spawner found!");
 					int rsPower = spawnerLoc.getBlock().getBlockPower();
 					if (rsPower != 0){
 						event.setCancelled(true);
