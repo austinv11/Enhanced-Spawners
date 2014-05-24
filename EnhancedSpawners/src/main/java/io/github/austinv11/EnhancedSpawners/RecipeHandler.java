@@ -2,6 +2,7 @@ package io.github.austinv11.EnhancedSpawners;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -90,6 +91,19 @@ public class RecipeHandler implements Listener{
 			Bukkit.getServer().addRecipe(iEgg);
 		}
 	}
+	public void spawnRandom(Location loc){
+		EntityType[] entityList = null;
+		int j = 0;
+		for (int i = 0; i < EntityType.values().length; i++){
+			if (!mobs.mysteryBlacklist(EntityType.values()[i])){
+				entityList[j] = EntityType.values()[i];
+				j++;
+			}
+		}
+		Random r = new Random();
+		int randEntity = r.nextInt(entityList.length);
+		loc.getWorld().spawnEntity(loc, entityList[randEntity]);
+	}
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event){
 		if (event.getBlockPlaced().getType() == Material.MOB_SPAWNER && event.getItemInHand().getItemMeta().getDisplayName().contains("Mob Spawner (")){
@@ -163,7 +177,7 @@ public class RecipeHandler implements Listener{
 				}
 			}
 			if (plugin.getConfig().getBoolean("Features.attunedEggsEqualSpawnEggs") == true && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getClickedBlock().getType() != Material.MOB_SPAWNER){
-				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG){
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && !event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
 					Player player = event.getPlayer();
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
 					Location eLoc = event.getClickedBlock().getLocation().clone();
@@ -171,6 +185,25 @@ public class RecipeHandler implements Listener{
 					int amount = player.getItemInHand().getAmount();
 					if (mobLoc != null){
 						mobLoc.getWorld().spawnEntity(mobLoc, EntityType.valueOf(mobName.toUpperCase()));
+						mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
+						mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
+						if (amount == 1){
+							ItemStack clear = new ItemStack (Material.AIR);
+							player.setItemInHand(clear);
+						}else{
+							player.getItemInHand().setAmount(amount-1);
+						}
+					}
+				}
+			}
+			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getClickedBlock().getType() != Material.MOB_SPAWNER){
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
+					Player player = event.getPlayer();
+					Location eLoc = event.getClickedBlock().getLocation().clone();
+					Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
+					int amount = player.getItemInHand().getAmount();
+					if (mobLoc != null){
+						spawnRandom(mobLoc);
 						mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
 						mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
 						if (amount == 1){

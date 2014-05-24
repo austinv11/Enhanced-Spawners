@@ -4,8 +4,11 @@ import org.bukkit.entity.EntityType;
 
 public class MobProperties {
 	EnhancedSpawners plugin;
+	EntityType[] mBlacklist;
 	public MobProperties(EnhancedSpawners eS) {
 		plugin = eS;
+		EntityType[] tempBlacklist = {EntityType.COMPLEX_PART, EntityType.DROPPED_ITEM, EntityType.ENDER_CRYSTAL, EntityType.ENDER_DRAGON, EntityType.ENDER_PEARL, EntityType.ENDER_SIGNAL, EntityType.FALLING_BLOCK, EntityType.FIREBALL, EntityType.FIREWORK, EntityType.FISHING_HOOK, EntityType.GIANT, EntityType.ITEM_FRAME, EntityType.LEASH_HITCH, EntityType.LIGHTNING, EntityType.MINECART_COMMAND, EntityType.MINECART_MOB_SPAWNER, EntityType.PAINTING, EntityType.PLAYER, EntityType.PRIMED_TNT, EntityType.SMALL_FIREBALL, EntityType.SPLASH_POTION, EntityType.UNKNOWN, EntityType.WEATHER, EntityType.WITHER, EntityType.WITHER_SKULL};
+		mBlacklist = tempBlacklist;
 	}
 	public boolean checkBlacklist(String mobName){
 		if (plugin.getConfig().getBoolean("Options.mobBlacklist")){
@@ -38,5 +41,16 @@ public class MobProperties {
 			return EntityType.SNOWMAN;
 		}
 		return null;
+	}
+	public boolean mysteryBlacklist(EntityType mob){
+		for (int i = 0; i < mBlacklist.length; i++){
+			if (mob == mBlacklist[i]){
+				return true;
+			}
+		}
+		return false;
+	}
+	public int getMysteryBlacklistLength(){
+		return mBlacklist.length;
 	}
 }
