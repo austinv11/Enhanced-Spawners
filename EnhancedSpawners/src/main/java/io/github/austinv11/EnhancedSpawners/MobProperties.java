@@ -1,11 +1,10 @@
 package io.github.austinv11.EnhancedSpawners;
 
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 
 public class MobProperties {
-	Plugin plugin;
-	public MobProperties(Plugin eS) {
+	EnhancedSpawners plugin;
+	public MobProperties(EnhancedSpawners eS) {
 		plugin = eS;
 	}
 	public boolean checkBlacklist(String mobName){

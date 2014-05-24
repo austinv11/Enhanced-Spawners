@@ -38,10 +38,12 @@ public class RecipeHandler implements Listener{
 	ItemStack spawner;
 	EnhancedSpawners plugin;
 	LocationCalculator lC;
+	MobProperties mobs;
 	public RecipeHandler(EnhancedSpawners pluginN){//Inits items and events
 		pluginN.getServer().getPluginManager().registerEvents(this, pluginN);
 		plugin = pluginN;
 		lC = new LocationCalculator();
+		mobs = new MobProperties(pluginN);
 		//Tempered Egg TODO make it unthrowable
 		List<String> tEggLore = new ArrayList<String>();
 		tEggLore.add("It seems hollow...");
@@ -128,7 +130,11 @@ public class RecipeHandler implements Listener{
 					BlockState state = event.getClickedBlock().getState();
 					CreatureSpawner spawner = (CreatureSpawner) state;
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
-					spawner.setCreatureTypeByName(mobName);
+					if (mobs.getAlias(mobName) == null){
+						spawner.setCreatureTypeByName(mobName);
+					}else{
+						spawner.setSpawnedType(mobs.getAlias(mobName));
+					}
 					spawner.update();
 					Location eLoc = event.getClickedBlock().getLocation().clone();
 					eLoc.setY(event.getClickedBlock().getLocation().getY() + 1);
@@ -169,7 +175,7 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageByEntityEvent event){
-		if (plugin.getConfig().getBoolean("Features.changeSpawners") == true){
+		if (plugin.getConfig().getBoolean("Features.changeSpawners") == true && !mobs.checkBlacklist(event.getEntityType().toString())){
 			if (event.getDamager().getType() == EntityType.PLAYER){
 				Player player = (Player) event.getDamager();
 				if (player.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY) == 1 && player.getItemInHand().getItemMeta().getDisplayName().contains("Infused Egg")){

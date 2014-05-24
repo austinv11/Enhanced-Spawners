@@ -26,6 +26,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 	FileHandler fileHandler;
 	File loginLogger = new File(getDataFolder(), "Data//loginTracker.yml");
 	int id = 78473;
+	MobProperties mobs;
 	@Override
 	public void onEnable(){
 		configInit(false);
@@ -48,6 +49,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			}
 		}
 		fileHandler = new FileHandler(config);
+		mobs = new MobProperties(this);
 		this.getServer().getPluginManager().registerEvents(this, this);
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
@@ -109,12 +111,19 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 				return false;
 			}
 		}else if (cmd.getName().equalsIgnoreCase("set-mob")){
-			if (sender.hasPermission("set-mob") && args.length == 1){
+			if (sender.hasPermission("set-mob") && args.length >= 1){
 				Player player = (Player) sender;
 				if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
 					BlockState state = player.getTargetBlock(null, 10).getState();//FIXME non-deprecated method
 					CreatureSpawner spawner = (CreatureSpawner) state;
-					spawner.setCreatureTypeByName(args[0].toUpperCase());
+					if (mobs.getAlias(args[0]) == null){
+						spawner.setCreatureTypeByName(args[0].toUpperCase());
+					}else{
+						spawner.setSpawnedType(mobs.getAlias(args[0]));
+					}
+					if (args.length >=2){
+						spawner.setDelay(Integer.parseInt(args[1]));
+					}
 					spawner.update();
 				}else{
 					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");

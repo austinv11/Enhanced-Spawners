@@ -8,13 +8,13 @@ main: io.github.austinv11.EnhancedSpawners.EnhancedSpawners
 commands:
    set-delay:
       description: Sets the delay of the spawner you are looking at
-      usage: /<command> <delay (number)>
+      usage: /<command> <delay>
       permission: EnhancedSpawners.set-delay
       permission-message: You don't have permission
       aliases: [setdelay, delay-set, delayset]
    set-mob:
       description: Sets mob of the spawner you are looking at
-      usage: /<command> <mob>
+      usage: /<command> <mob> <optional: delay>
       permission: EnhancedSpawners.set-delay
       permission-message: You don't have permission
       aliases: [setmob, mob-set, mobset]
