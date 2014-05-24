@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -22,10 +23,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -36,6 +39,7 @@ public class RecipeHandler implements Listener{
 	ItemStack infusedEgg;
 	ItemStack spawnEgg;
 	ItemStack spawner;
+	ItemStack mysteryEgg;
 	EnhancedSpawners plugin;
 	LocationCalculator lC;
 	MobProperties mobs;
@@ -61,6 +65,13 @@ public class RecipeHandler implements Listener{
 		iEggMeta.setDisplayName("Infused Egg");
 		//eggMeta.setLore(iEggLore);
 		infusedEgg.setItemMeta(iEggMeta);
+		List<String> mysteryLore = new ArrayList<String>();
+		mysteryLore.add("...It's a mystery");
+		mysteryEgg = new ItemStack(Material.MONSTER_EGG);
+		ItemMeta mysteryMeta = mysteryEgg.getItemMeta();
+		mysteryMeta.setDisplayName("Attuned Egg (Mystery)");
+		mysteryMeta.setLore(mysteryLore);
+		mysteryEgg.setItemMeta(mysteryMeta);
 		//Init recipes
 		initRecipes();
 	}
@@ -212,6 +223,52 @@ public class RecipeHandler implements Listener{
 					int rsPower = spawnerLoc.getBlock().getBlockPower();
 					if (rsPower != 0){
 						event.setCancelled(true);
+					}
+				}
+			}
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onGeneration(ChunkPopulateEvent event){
+		if (plugin.getConfig().getBoolean("Features.dungeonLoot")){
+			BlockState[] tileEnts = event.getChunk().getTileEntities();
+			for (BlockState state : tileEnts) {
+				if (state.getType() != Material.CHEST){
+					continue;
+				}else{
+					Chest chest = (Chest) state;
+					Inventory cInv = chest.getInventory();
+					double lootPasses = Math.random();
+					boolean cont = false;
+					if (lootPasses <= 0.35){//35% of any loot
+						cont = true;
+					}
+					if (cont){
+						lootPasses = Math.random();
+						int quantity;
+						if (lootPasses <= 0.75){//75% for 1
+							quantity = 1;
+						}else if (lootPasses <= 0.95){//20% for 2
+							quantity = 2;
+						}else{//5% for 3
+							quantity = 3;
+						}
+						lootPasses = Math.random();
+						int lootType;
+						if (lootPasses <= 0.65){//65% for tempered egg
+							lootType = 1;
+						}else{//35% for mystery egg
+							lootType = 2;
+						}
+						if (lootType == 1){
+							for (int i = 0; i < quantity; i++){
+								cInv.addItem(temperedEgg);
+							}
+						}else{
+							for (int i = 0; i < quantity; i++){
+								cInv.addItem(mysteryEgg);
+							}
+						}
 					}
 				}
 			}

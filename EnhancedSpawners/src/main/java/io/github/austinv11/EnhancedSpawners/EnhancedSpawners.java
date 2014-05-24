@@ -62,6 +62,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
 			config.addDefault("Features.attunedEggsEqualSpawnEggs", true);
+			config.addDefault("Features.dungeonLoot", true);
 			config.addDefault("Features.redstoneToggle(EXP)", false);
 			config.options().copyDefaults(true);
 			saveConfig();
@@ -73,6 +74,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
 			config.set("Features.attunedEggsEqualSpawnEggs", true);
+			config.set("Features.dungeonLoot", true);
 			config.set("Features.redstoneToggle(EXP)", false);
 			saveConfig();
 		}
