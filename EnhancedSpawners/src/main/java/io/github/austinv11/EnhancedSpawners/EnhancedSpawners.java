@@ -20,7 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EnhancedSpawners extends JavaPlugin implements Listener{
-	String CURRENT_VERSION = "1.1.1"; //TODO remember to update
+	String CURRENT_VERSION = "1.2.0"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
@@ -55,6 +55,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		if (revert == false){
 			config.addDefault("Options.autoUpdater", true);
 			config.addDefault("Options.mcstatsDataCollection", true);
+			config.addDefault("Options.mobBlacklist", true);
 			config.addDefault("Options.setToDefault", false);
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
@@ -65,6 +66,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		}else{
 			config.set("Options.autoUpdater", true);
 			config.set("Options.mcstatsDataCollection", true);
+			config.set("Options.mobBlacklist", true);
 			config.set("Options.setToDefault", false);
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
