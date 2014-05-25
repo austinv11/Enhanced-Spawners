@@ -14,7 +14,7 @@ commands:
       aliases: [setdelay, delay-set, delayset]
    set-mob:
       description: Sets mob of the spawner you are looking at
-      usage: /<command> <mob> <optional: delay>
+      usage: /<command> <mob> <optional:delay>
       permission: EnhancedSpawners.set-delay
       permission-message: You don't have permission
       aliases: [setmob, mob-set, mobset]

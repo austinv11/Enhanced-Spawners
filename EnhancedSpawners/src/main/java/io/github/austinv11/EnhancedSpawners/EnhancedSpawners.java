@@ -88,7 +88,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		boolean result = fileHandler.getBoolean(loginLogger, "firstTime."+event.getPlayer().getName());
 		if (result != true){
 			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), true);
-			event.getPlayer().sendMessage("Welcome to the server! This server has EnhancedSpawners installed! Visit http://bit.ly/1kN4UZO for info about it.");
+			event.getPlayer().sendMessage("Welcome to the server! This server has "+ChatColor.GOLD+"EnhancedSpawners "+ChatColor.RESET+"installed! Visit "+ChatColor.BLUE+"http://bit.ly/1kN4UZO"+ChatColor.RESET+" for info about it.");
 		}
 	}
 	@SuppressWarnings("deprecation")
