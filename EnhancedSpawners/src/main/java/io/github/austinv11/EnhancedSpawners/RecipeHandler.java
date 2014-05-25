@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -103,6 +104,14 @@ public class RecipeHandler implements Listener{
 		Random r = new Random();
 		int randEntity = r.nextInt(entityList.length);
 		loc.getWorld().spawnEntity(loc, entityList[randEntity]);
+	}
+	@EventHandler
+	public void onEggThrown(PlayerEggThrowEvent event){
+		if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().hasItemMeta()){
+			if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Tempered Egg")  && event.getPlayer().getItemInHand().getType() == Material.EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Infused Egg")){
+				event.setHatching(false);
+			}
+		}
 	}
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event){
