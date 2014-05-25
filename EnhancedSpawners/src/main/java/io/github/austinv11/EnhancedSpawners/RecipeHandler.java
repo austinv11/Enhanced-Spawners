@@ -301,7 +301,7 @@ public class RecipeHandler implements Listener{
 						}
 						lootPasses = Math.random();
 						int lootType;
-						if (lootPasses <= 0.65){//65% for tempered egg
+						if (lootPasses <= 0.65 && plugin.getConfig().getBoolean("Features.changeSpawners")){//65% for tempered egg
 							lootType = 1;
 						}else{//35% for mystery egg
 							lootType = 2;
@@ -310,7 +310,7 @@ public class RecipeHandler implements Listener{
 							for (int i = 0; i < quantity; i++){
 								cInv.addItem(temperedEgg);
 							}
-						}else{
+						}else if (lootType == 2){
 							for (int i = 0; i < quantity; i++){
 								cInv.addItem(mysteryEgg);
 							}
