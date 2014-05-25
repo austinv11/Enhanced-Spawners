@@ -45,6 +45,7 @@ public class RecipeHandler implements Listener{
 	EnhancedSpawners plugin;
 	LocationCalculator lC;
 	MobProperties mobs;
+	EntityType[] entityList = EntityType.values();
 	public RecipeHandler(EnhancedSpawners pluginN){//Inits items and events
 		pluginN.getServer().getPluginManager().registerEvents(this, pluginN);
 		plugin = pluginN;
@@ -93,16 +94,17 @@ public class RecipeHandler implements Listener{
 		}
 	}
 	public void spawnRandom(Location loc){
-		EntityType[] entityList = null;
-		int j = 0;
 		for (int i = 0; i < EntityType.values().length; i++){
-			if (!mobs.mysteryBlacklist(EntityType.values()[i])){
-				entityList[j] = EntityType.values()[i];
-				j++;
+			if (mobs.mysteryBlacklist(EntityType.values()[i])){
+				entityList[i] = null;
 			}
 		}
 		Random r = new Random();
 		int randEntity = r.nextInt(entityList.length);
+		while (entityList[randEntity] == null){
+			r = new Random();
+			randEntity = r.nextInt(entityList.length);
+		}
 		loc.getWorld().spawnEntity(loc, entityList[randEntity]);
 	}
 	@EventHandler
