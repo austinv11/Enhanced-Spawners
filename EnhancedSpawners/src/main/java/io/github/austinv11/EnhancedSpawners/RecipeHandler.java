@@ -164,24 +164,26 @@ public class RecipeHandler implements Listener{
 					BlockState state = event.getClickedBlock().getState();
 					CreatureSpawner spawner = (CreatureSpawner) state;
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
-					if (mobs.getAlias(mobName) == null){
-						spawner.setCreatureTypeByName(mobName);
-					}else{
-						spawner.setSpawnedType(mobs.getAlias(mobName));
-					}
-					spawner.update();
-					Location eLoc = event.getClickedBlock().getLocation().clone();
-					eLoc.setY(event.getClickedBlock().getLocation().getY() + 1);
-					event.getClickedBlock().getWorld().playSound(eLoc, Sound.ANVIL_LAND, 10, 1);//TODO change sound
-					event.getClickedBlock().getWorld().playEffect(eLoc, Effect.ENDER_SIGNAL, 0);
-					int amount = player.getItemInHand().getAmount();
-					if (amount == 1){
-						ItemStack clear = new ItemStack (Material.AIR);
-						player.setItemInHand(clear);
-					}else{
-						player.getItemInHand().setAmount(amount-1);
-					}
-					player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
+					if (mobs.checkBlacklist(mobName)){
+						if (mobs.getAlias(mobName) == null){
+							spawner.setCreatureTypeByName(mobName);
+						}else{
+							spawner.setSpawnedType(mobs.getAlias(mobName));
+						}
+						spawner.update();
+						Location eLoc = event.getClickedBlock().getLocation().clone();
+						eLoc.setY(event.getClickedBlock().getLocation().getY() + 1);
+						event.getClickedBlock().getWorld().playSound(eLoc, Sound.ANVIL_LAND, 10, 1);//TODO change sound
+						event.getClickedBlock().getWorld().playEffect(eLoc, Effect.ENDER_SIGNAL, 0);
+						int amount = player.getItemInHand().getAmount();
+						if (amount == 1){
+							ItemStack clear = new ItemStack (Material.AIR);
+							player.setItemInHand(clear);
+						}else{
+							player.getItemInHand().setAmount(amount-1);
+						}
+							player.sendMessage("You have successfully set this spawner to spawn "+ChatColor.GOLD+mobName.toLowerCase()+"s"+ChatColor.RESET+"!");
+					}	
 					return;
 				}
 			}
