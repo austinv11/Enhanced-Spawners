@@ -164,7 +164,7 @@ public class RecipeHandler implements Listener{
 					BlockState state = event.getClickedBlock().getState();
 					CreatureSpawner spawner = (CreatureSpawner) state;
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
-					if (mobs.checkBlacklist(mobName)){
+					if (!mobs.checkBlacklist(mobName)){
 						if (mobs.getAlias(mobName) == null){
 							spawner.setCreatureTypeByName(mobName);
 						}else{
