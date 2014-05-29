@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 
 //Yes, this code is taken from my pickaxetweak plugin
 public class LocationCalculator {
@@ -28,7 +29,7 @@ public class LocationCalculator {
 			Location newLoc = new Location(loc.getWorld(), loc.getX() - 1, loc.getY(), loc.getZ());
 			return newLoc;
 		}else{
-			Bukkit.getServer().getLogger().severe("ERROR: UNKNOWN BLOCKFACE");
+			Bukkit.getServer().getLogger().severe("ERROR: UNKNOWN BLOCKFACE: '"+bf.toString()+"'");
 			return null;
 		}
 	}
@@ -51,5 +52,33 @@ public class LocationCalculator {
 			}
 		}
 		return null;
+	}
+	public BlockFace getDirection(Player p) //Useful for player.getTargetBlock()
+	{
+	    Float yaw = p.getLocation().getYaw();
+	    yaw = yaw / 90;
+	    yaw = (float)Math.round(yaw);
+	    Float pitch = p.getLocation().getPitch();
+	    pitch = pitch / 90;
+	    pitch = (float)Math.round(pitch);
+	    if (pitch == 1){
+	    	return BlockFace.UP;
+	    }
+	    if (pitch == -1){
+	    	return BlockFace.DOWN;
+	    }
+	    if (yaw == -4 || yaw == 0 || yaw == 4) {
+	    	return BlockFace.NORTH;
+	    	}
+	    if (yaw == -1 || yaw == 3) {
+	    	return BlockFace.WEST;
+	    	}
+	    if (yaw == -2 || yaw == 2) {
+	    	return BlockFace.SOUTH;
+	    	}
+	    if (yaw == -3 || yaw == 1) {
+	    	return BlockFace.EAST;
+	    	}
+	    return null;
 	}
 }

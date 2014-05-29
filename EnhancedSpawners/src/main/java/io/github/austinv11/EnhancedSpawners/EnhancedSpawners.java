@@ -145,21 +145,26 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){
 			if (sender.hasPermission("new-spawner") && args.length >= 0){
 				Player player = (Player) sender;
-				BlockFace bF = player.getTargetBlock(null, 10).getFace(player.getTargetBlock(null, 10));
+				BlockFace bF = locCalc.getDirection(player);
 				Location loc = player.getTargetBlock(null, 10).getLocation().clone();
 				Location spawnerLoc = locCalc.getLoc(bF, loc);
-				spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
-				BlockState state = spawnerLoc.getBlock().getState();
-				CreatureSpawner spawner = (CreatureSpawner) state;
-				if (mobs.getAlias(args[0]) == null){
-					spawner.setCreatureTypeByName(args[0].toUpperCase());
+				if (spawnerLoc.getBlock().getType() != Material.AIR || spawnerLoc.getBlock().getType() != null){
+					spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
+					BlockState state = spawnerLoc.getBlock().getState();
+					CreatureSpawner spawner = (CreatureSpawner) state;
+					if (mobs.getAlias(args[0]) == null){
+						spawner.setCreatureTypeByName(args[0].toUpperCase());
+					}else{
+						spawner.setSpawnedType(mobs.getAlias(args[0]));
+					}
+					if (args.length >=2){
+						spawner.setDelay(Integer.parseInt(args[1]));
+					}
+					spawner.update();
+					sender.sendMessage("You have successfully a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
 				}else{
-					spawner.setSpawnedType(mobs.getAlias(args[0]));
+					sender.sendMessage(ChatColor.RED+"You are not looking at a valid block");
 				}
-				if (args.length >=2){
-					spawner.setDelay(Integer.parseInt(args[1]));
-				}
-				spawner.update();
 				return true;
 			}else if (!(sender.hasPermission("new-spawner"))){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
