@@ -142,7 +142,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			}else{
 				return false;
 			}
-		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){
+		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){//FIXME air detecting
 			if (sender.hasPermission("new-spawner") && args.length >= 0){
 				Player player = (Player) sender;
 				BlockFace bF = locCalc.getDirection(player);
