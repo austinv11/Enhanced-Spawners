@@ -6,7 +6,9 @@ import java.io.IOException;
 import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
@@ -20,13 +22,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EnhancedSpawners extends JavaPlugin implements Listener{
-	String CURRENT_VERSION = "1.2.0"; //TODO remember to update
+	String CURRENT_VERSION = "1.2.1"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
 	File loginLogger = new File(getDataFolder(), "Data//loginTracker.yml");
 	int id = 78473;
 	MobProperties mobs;
+	LocationCalculator locCalc;
 	@Override
 	public void onEnable(){
 		configInit(false);
@@ -50,6 +53,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		}
 		fileHandler = new FileHandler(config);
 		mobs = new MobProperties(this);
+		locCalc = new LocationCalculator();
 		this.getServer().getPluginManager().registerEvents(this, this);
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
@@ -107,7 +111,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");
 				}
 				return true;
-			}else if (!(sender.isOp())){
+			}else if (!(sender.hasPermission("set-delay"))){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
 				return true;
 			}else{
@@ -132,7 +136,32 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 					sender.sendMessage(ChatColor.RED+"Error: You are not looking at a mob spawner");
 				}
 				return true;
-			}else if (!(sender.isOp())){
+			}else if (!(sender.hasPermission("set-mob"))){
+				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
+				return true;
+			}else{
+				return false;
+			}
+		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){
+			if (sender.hasPermission("new-spawner") && args.length >= 0){
+				Player player = (Player) sender;
+				BlockFace bF = player.getTargetBlock(null, 10).getFace(player.getTargetBlock(null, 10));
+				Location loc = player.getTargetBlock(null, 10).getLocation().clone();
+				Location spawnerLoc = locCalc.getLoc(bF, loc);
+				spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
+				BlockState state = spawnerLoc.getBlock().getState();
+				CreatureSpawner spawner = (CreatureSpawner) state;
+				if (mobs.getAlias(args[0]) == null){
+					spawner.setCreatureTypeByName(args[0].toUpperCase());
+				}else{
+					spawner.setSpawnedType(mobs.getAlias(args[0]));
+				}
+				if (args.length >=2){
+					spawner.setDelay(Integer.parseInt(args[1]));
+				}
+				spawner.update();
+				return true;
+			}else if (!(sender.hasPermission("new-spawner"))){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
 				return true;
 			}else{

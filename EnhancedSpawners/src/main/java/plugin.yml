@@ -1,5 +1,5 @@
 name: EnhancedSpawners
-version: 1.2.0
+version: 1.2.1
 description: A plugin which enhances spawners in various ways
 author: austinv11
 website: austinv11.github.io
@@ -15,13 +15,19 @@ commands:
    set-mob:
       description: Sets mob of the spawner you are looking at
       usage: /<command> <mob> <optional:delay>
-      permission: EnhancedSpawners.set-delay
+      permission: EnhancedSpawners.set-mob
+      permission-message: You don't have permission
+      aliases: [setmob, mob-set, mobset]
+   new-spawner:
+      description: Creates a mob spawner where you are looking at
+      usage: /<command> <mob> <optional:delay>
+      permission: EnhancedSpawners.new-spawner
       permission-message: You don't have permission
       aliases: [setmob, mob-set, mobset]
 
 permissions:
    EnhancedSpawners.*:
-        description: Gives access to all LootPlus commands
+        description: Gives access to all EnhancedSpawners commands
    EnhancedSpawners.set-delay:
       description: Sets the delay of the spawner you are looking at
    EnhancedSpawners.set-mob:
@@ -29,3 +35,5 @@ permissions:
    EnhancedSpawners.silkySpawners:
       description: Allows for silk touching spawners
       default: true
+   EnhancedSpawners.new-spawner:
+      description: Creates a mob spawner where you are looking at
