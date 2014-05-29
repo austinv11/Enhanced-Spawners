@@ -23,7 +23,7 @@ commands:
       usage: /<command> <mob> <optional:delay>
       permission: EnhancedSpawners.new-spawner
       permission-message: You don't have permission
-      aliases: [setmob, mob-set, mobset]
+      aliases: [newspawner, make-spawner, makespawner]
 
 permissions:
    EnhancedSpawners.*:
