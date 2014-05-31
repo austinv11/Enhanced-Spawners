@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import net.gravitydevelopment.updater.Updater;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,9 +21,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class EnhancedSpawners extends JavaPlugin implements Listener{
-	String CURRENT_VERSION = "1.2.1"; //TODO remember to update
+	String CURRENT_VERSION = "1.2.2"; //TODO remember to update
 	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
@@ -143,7 +146,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 				return false;
 			}
 		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){//FIXME valid block detection
-			if (sender.hasPermission("new-spawner") && args.length >= 0){
+			if (sender.hasPermission("new-spawner") && args.length > 0){
 				Player player = (Player) sender;
 				BlockFace bF = locCalc.getDirection(player);
 				Location loc = player.getTargetBlock(null, 10).getLocation().clone();
@@ -167,6 +170,40 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 				}
 				return true;
 			}else if (!(sender.hasPermission("new-spawner"))){
+				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
+				return true;
+			}else{
+				return false;
+			}
+		}else if (cmd.getName().equalsIgnoreCase("give-spawner")){
+			if (sender.hasPermission("give-spawner") && args.length > 0){
+				if (args.length > 1){
+					Player player = Bukkit.getServer().getPlayer(args[0]);
+					if (player != null){
+						ItemStack spawner = new ItemStack(Material.MOB_SPAWNER);
+						ItemMeta spawnerMeta = spawner.getItemMeta();
+						spawnerMeta.setDisplayName("Mob Spawner ("+args[1]+")");
+						spawner.setItemMeta(spawnerMeta);
+						player.getInventory().addItem(spawner);
+						sender.sendMessage("You have successfully given "+args[0]+" a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
+						player.sendMessage(sender.getName()+" has given you a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
+					}else{
+						sender.sendMessage(ChatColor.RED+"Error: '"+args[0]+"' is not a valid player");
+					}
+				}else{
+					if (sender instanceof Player){
+						ItemStack spawner = new ItemStack(Material.MOB_SPAWNER);
+						ItemMeta spawnerMeta = spawner.getItemMeta();
+						spawnerMeta.setDisplayName("Mob Spawner ("+args[0]+")");
+						spawner.setItemMeta(spawnerMeta);
+						Player player = (Player) sender;
+						player.getInventory().addItem(spawner);
+					}else{
+						sender.sendMessage(ChatColor.RED+"Error: You are not a player");
+					}
+				}
+				return true;
+			}else if (!(sender.hasPermission("give-spawner"))){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
 				return true;
 			}else{

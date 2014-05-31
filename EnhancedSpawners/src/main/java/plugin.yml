@@ -1,5 +1,5 @@
 name: EnhancedSpawners
-version: 1.2.1
+version: 1.2.2
 description: A plugin which enhances spawners in various ways
 author: austinv11
 website: austinv11.github.io
@@ -24,6 +24,12 @@ commands:
       permission: EnhancedSpawners.new-spawner
       permission-message: You don't have permission
       aliases: [newspawner, make-spawner, makespawner]
+   give-spawner:
+      description: Gives you either the spawner you’re looking at, or the one you input
+      usage: /<command> <mob> <optional:player> or /<command>
+      permission: EnhancedSpawners.give-spawner
+      permission-message: You don't have permission
+      aliases: [givespawner, get-spawner, getspawner]
 
 permissions:
    EnhancedSpawners.*:
@@ -37,3 +43,5 @@ permissions:
       default: true
    EnhancedSpawners.new-spawner:
       description: Creates a mob spawner where you are looking at
+   EnhancedSpawners.give-spawner:
+      description: Gives you either the spawner you’re looking at, or the one you input
