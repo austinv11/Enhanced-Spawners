@@ -142,13 +142,13 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			}else{
 				return false;
 			}
-		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){//FIXME air detecting
+		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){//FIXME valid block detection
 			if (sender.hasPermission("new-spawner") && args.length >= 0){
 				Player player = (Player) sender;
 				BlockFace bF = locCalc.getDirection(player);
 				Location loc = player.getTargetBlock(null, 10).getLocation().clone();
 				Location spawnerLoc = locCalc.getLoc(bF, loc);
-				if (spawnerLoc.getBlock().getType() != Material.AIR || spawnerLoc.getBlock().getType() != null){
+				if ((loc.getBlock().getType() != Material.AIR || loc.getBlock().getType() != null) && (spawnerLoc.getBlock().getType() != Material.AIR || spawnerLoc.getBlock().getType() != null)){
 					spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
 					BlockState state = spawnerLoc.getBlock().getState();
 					CreatureSpawner spawner = (CreatureSpawner) state;
