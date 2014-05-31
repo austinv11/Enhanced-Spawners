@@ -189,8 +189,8 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 						spawnerMeta.setDisplayName("Mob Spawner ("+args[1]+")");
 						spawner.setItemMeta(spawnerMeta);
 						player.getInventory().addItem(spawner);
-						sender.sendMessage("You have successfully given "+args[0]+" a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
-						player.sendMessage(sender.getName()+" has given you a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
+						sender.sendMessage("You have successfully given "+args[0]+" a spawner spawning "+ChatColor.GOLD+args[1].toLowerCase()+"s"+ChatColor.RESET+"!");
+						player.sendMessage(sender.getName()+" has given you a spawner spawning "+ChatColor.GOLD+args[1].toLowerCase()+"s"+ChatColor.RESET+"!");
 					}else{
 						sender.sendMessage(ChatColor.RED+"Error: '"+args[0]+"' is not a valid player");
 					}
