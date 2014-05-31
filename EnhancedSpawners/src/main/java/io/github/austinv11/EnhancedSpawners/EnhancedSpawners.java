@@ -147,26 +147,30 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			}
 		}else if (cmd.getName().equalsIgnoreCase("new-spawner")){//FIXME valid block detection
 			if (sender.hasPermission("new-spawner") && args.length > 0){
-				Player player = (Player) sender;
-				BlockFace bF = locCalc.getDirection(player);
-				Location loc = player.getTargetBlock(null, 10).getLocation().clone();
-				Location spawnerLoc = locCalc.getLoc(bF, loc);
-				if ((loc.getBlock().getType() != Material.AIR || loc.getBlock().getType() != null) && (spawnerLoc.getBlock().getType() != Material.AIR || spawnerLoc.getBlock().getType() != null)){
-					spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
-					BlockState state = spawnerLoc.getBlock().getState();
-					CreatureSpawner spawner = (CreatureSpawner) state;
-					if (mobs.getAlias(args[0]) == null){
-						spawner.setCreatureTypeByName(args[0].toUpperCase());
+				if (sender instanceof Player){
+					Player player = (Player) sender;
+					BlockFace bF = locCalc.getDirection(player);
+					Location loc = player.getTargetBlock(null, 10).getLocation().clone();
+					Location spawnerLoc = locCalc.getLoc(bF, loc);
+					if ((loc.getBlock().getType() != Material.AIR || loc.getBlock().getType() != null) && (spawnerLoc.getBlock().getType() != Material.AIR || spawnerLoc.getBlock().getType() != null)){
+						spawnerLoc.getBlock().setType(Material.MOB_SPAWNER);
+						BlockState state = spawnerLoc.getBlock().getState();
+						CreatureSpawner spawner = (CreatureSpawner) state;
+						if (mobs.getAlias(args[0]) == null){
+							spawner.setCreatureTypeByName(args[0].toUpperCase());
+						}else{
+							spawner.setSpawnedType(mobs.getAlias(args[0]));
+						}
+						if (args.length >=2){
+							spawner.setDelay(Integer.parseInt(args[1]));
+						}
+						spawner.update();
+						sender.sendMessage("You have successfully a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
 					}else{
-						spawner.setSpawnedType(mobs.getAlias(args[0]));
+						sender.sendMessage(ChatColor.RED+"You are not looking at a valid block");
 					}
-					if (args.length >=2){
-						spawner.setDelay(Integer.parseInt(args[1]));
-					}
-					spawner.update();
-					sender.sendMessage("You have successfully a spawner spawning "+ChatColor.GOLD+args[0].toLowerCase()+"s"+ChatColor.RESET+"!");
 				}else{
-					sender.sendMessage(ChatColor.RED+"You are not looking at a valid block");
+					sender.sendMessage(ChatColor.RED+"Error: You are not a player");
 				}
 				return true;
 			}else if (!(sender.hasPermission("new-spawner"))){
@@ -176,7 +180,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 				return false;
 			}
 		}else if (cmd.getName().equalsIgnoreCase("give-spawner")){
-			if (sender.hasPermission("give-spawner") && args.length > 0){
+			if (sender.hasPermission("give-spawner")){
 				if (args.length > 1){
 					Player player = Bukkit.getServer().getPlayer(args[0]);
 					if (player != null){
@@ -190,7 +194,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 					}else{
 						sender.sendMessage(ChatColor.RED+"Error: '"+args[0]+"' is not a valid player");
 					}
-				}else{
+				}else if (args.length == 1){
 					if (sender instanceof Player){
 						ItemStack spawner = new ItemStack(Material.MOB_SPAWNER);
 						ItemMeta spawnerMeta = spawner.getItemMeta();
@@ -198,6 +202,23 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 						spawner.setItemMeta(spawnerMeta);
 						Player player = (Player) sender;
 						player.getInventory().addItem(spawner);
+					}else{
+						sender.sendMessage(ChatColor.RED+"Error: You are not a player");
+					}
+				}else if (args.length == 0){
+					if (sender instanceof Player){
+						Player player = (Player) sender;
+						if (player.getTargetBlock(null, 10).getType() == Material.MOB_SPAWNER){
+							CreatureSpawner spawnr = (CreatureSpawner) player.getTargetBlock(null, 10).getState();
+							String mobName = spawnr.getCreatureTypeName();
+							ItemStack spawner = new ItemStack(Material.MOB_SPAWNER);
+							ItemMeta spawnerMeta = spawner.getItemMeta();
+							spawnerMeta.setDisplayName("Mob Spawner ("+mobName+")");
+							spawner.setItemMeta(spawnerMeta);
+							player.getInventory().addItem(spawner);
+						}else{
+							sender.sendMessage(ChatColor.RED+"Error: You are not looking at a spawner");
+						}
 					}else{
 						sender.sendMessage(ChatColor.RED+"Error: You are not a player");
 					}
