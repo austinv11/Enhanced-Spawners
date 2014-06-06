@@ -122,14 +122,21 @@ public class RecipeHandler implements Listener{
 			BlockState state = event.getBlockPlaced().getState();
 			List<String> spawnerLore = new ArrayList<String>();
 			spawnerLore.add("It contains the spirit of a "+mobName);
-			if (event.getItemInHand().getItemMeta().getLore() == spawnerLore){
+			if (event.getItemInHand().hasItemMeta()){
+				List<String> tempLore = event.getItemInHand().getItemMeta().getLore();
+				if (tempLore.get(0).contains(spawnerLore.get(0))){
+					CreatureSpawner spawner = (CreatureSpawner) state;
+					spawner.setCreatureTypeByName(mobName.toUpperCase());
+					spawner.update();
+				}else{
+					event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
+					event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
+					event.setCancelled(true);
+				}
+			}else{
 				CreatureSpawner spawner = (CreatureSpawner) state;
 				spawner.setCreatureTypeByName(mobName.toUpperCase());
 				spawner.update();
-			}else{
-				event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-				event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker");
-				event.setCancelled(true);
 			}
 		}
 	}
@@ -179,7 +186,8 @@ public class RecipeHandler implements Listener{
 					String mobName = player.getItemInHand().getItemMeta().getDisplayName().substring(13, player.getItemInHand().getItemMeta().getDisplayName().length()).replace(")", "");
 					List<String> spawnLore = new ArrayList<String>();
 					spawnLore.add("This egg contains the spirit of a "+mobName);
-					if (event.getPlayer().getItemInHand().getItemMeta().getLore() == spawnLore){
+					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+					if (tempLore.get(0).contains(spawnLore.get(0))){
 						if (!mobs.checkBlacklist(mobName)){
 							if (mobs.getAlias(mobName) == null){
 								spawner.setCreatureTypeByName(mobName);
@@ -202,7 +210,7 @@ public class RecipeHandler implements Listener{
 						}	
 					}else{
 						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker");
+						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
 						//event.setCancelled(true);
 					}
 					return;
@@ -217,7 +225,8 @@ public class RecipeHandler implements Listener{
 					int amount = player.getItemInHand().getAmount();
 					List<String> spawnLore = new ArrayList<String>();
 					spawnLore.add("This egg contains the spirit of a "+mobName);
-					if (player.getItemInHand().getItemMeta().getLore() == spawnLore){
+					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+					if (tempLore.get(0).contains(spawnLore.get(0))){
 						if (mobLoc != null){
 							mobLoc.getWorld().spawnEntity(mobLoc, EntityType.valueOf(mobName.toUpperCase()));
 							mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
@@ -231,7 +240,7 @@ public class RecipeHandler implements Listener{
 						}
 					}else{
 						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker");
+						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
 						//event.setCancelled(true);
 					}
 				}
@@ -244,7 +253,8 @@ public class RecipeHandler implements Listener{
 					int amount = player.getItemInHand().getAmount();
 					List<String> mysteryLore = new ArrayList<String>();
 					mysteryLore.add("...It's a mystery");
-					if (player.getItemInHand().getItemMeta().getLore() == mysteryLore){
+					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+					if (tempLore.get(0).contains(mysteryLore.get(0))){
 						if (mobLoc != null){
 							spawnRandom(mobLoc);
 							mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
@@ -258,7 +268,7 @@ public class RecipeHandler implements Listener{
 						}
 					}else{
 						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker");
+						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
 						//event.setCancelled(true);
 					}
 				}
