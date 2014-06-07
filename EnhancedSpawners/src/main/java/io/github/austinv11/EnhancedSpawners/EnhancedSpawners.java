@@ -65,6 +65,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.addDefault("Options.autoUpdater", true);
 			config.addDefault("Options.mcstatsDataCollection", true);
 			config.addDefault("Options.mobBlacklist", true);
+			config.addDefault("Options.compassCleaner", true);
 			config.addDefault("Options.setToDefault", false);
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
@@ -77,6 +78,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.set("Options.autoUpdater", true);
 			config.set("Options.mcstatsDataCollection", true);
 			config.set("Options.mobBlacklist", true);
+			config.set("Options.compassCleaner", true);
 			config.set("Options.setToDefault", false);
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
@@ -92,6 +94,11 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent event){
+		//Setting compasses to default
+		new RecipeHandler(this).debug(event.getPlayer());
+		if (config.getBoolean("Options.compassCleaner")){
+			event.getPlayer().setCompassTarget(event.getPlayer().getLocation().getWorld().getSpawnLocation());
+		}
 		boolean result = fileHandler.getBoolean(loginLogger, "firstTime."+event.getPlayer().getName());
 		if (result != true){
 			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), true);

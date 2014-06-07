@@ -7,9 +7,11 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
@@ -35,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 
 public class RecipeHandler implements Listener{
 	ItemStack temperedEgg;
@@ -42,6 +45,10 @@ public class RecipeHandler implements Listener{
 	ItemStack spawnEgg;
 	ItemStack spawner;
 	ItemStack mysteryEgg;
+	ItemStack sFinder;
+	int S_FINDER_DURATION = 10;
+	int S_FINDER_COST = 5;
+	int S_FINDER_RADIUS = 20;
 	EnhancedSpawners plugin;
 	LocationCalculator lC;
 	MobProperties mobs;
@@ -75,6 +82,15 @@ public class RecipeHandler implements Listener{
 		mysteryMeta.setDisplayName("Attuned Egg (Mystery)");
 		mysteryMeta.setLore(mysteryLore);
 		mysteryEgg.setItemMeta(mysteryMeta);
+		List<String> sFinderLore = new ArrayList<String>();
+		sFinderLore.add("Right Click to Activate for "+S_FINDER_DURATION+" Seconds");
+		sFinderLore.add("Requires "+S_FINDER_COST+" XP Levels");
+		sFinderLore.add("Searches a "+S_FINDER_RADIUS+" X "+S_FINDER_RADIUS+" Area");
+		sFinder = new ItemStack(Material.COMPASS);
+		ItemMeta sFinderMeta = sFinder.getItemMeta();
+		sFinderMeta.setDisplayName(ChatColor.AQUA+"Spawner Finder");
+		sFinderMeta.setLore(sFinderLore);
+		sFinder.setItemMeta(sFinderMeta);
 		//Init recipes
 		initRecipes();
 	}
@@ -175,6 +191,9 @@ public class RecipeHandler implements Listener{
 			}
 		}
 	}
+	public void debug(Player player){ //TODO DELETE
+		player.getInventory().addItem(sFinder);
+	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if (event.getPlayer().getItemInHand() != null && event.getClickedBlock() != null && event.getPlayer().getItemInHand().hasItemMeta()){
@@ -273,6 +292,46 @@ public class RecipeHandler implements Listener{
 					}
 				}
 			}
+			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getType() == Material.COMPASS){
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Spawner Finder") && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
+					Player player = event.getPlayer();
+					List<String> sFinderLore = new ArrayList<String>();
+					sFinderLore.add("Right Click");
+					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+					if (tempLore.get(0).contains(sFinderLore.get(0))){
+						if (player.getLevel() >= S_FINDER_COST || player.getGameMode() == GameMode.CREATIVE){
+							if (player.getGameMode() != GameMode.CREATIVE){
+								player.setLevel(player.getLevel() - S_FINDER_COST);
+							}
+							Block block = player.getLocation().clone().getBlock();
+							boolean found = false;
+							loop:
+							for (int x = -(S_FINDER_RADIUS); x <= S_FINDER_RADIUS; x ++){
+							  for (int y = -(S_FINDER_RADIUS); y <= S_FINDER_RADIUS; y ++) {
+							    for (int z = -(S_FINDER_RADIUS); z <= S_FINDER_RADIUS; z ++) {
+							      if (block.getRelative(x,y,z).getType() == Material.MOB_SPAWNER){
+							          player.setCompassTarget(block.getRelative(x,y,z).getLocation().clone());
+							          player.sendMessage("A spawner has been "+ChatColor.GREEN+"found"+ChatColor.RESET+"!");
+							          found = true;
+							          BukkitTask task = new CompassReset(player).runTaskLater(this.plugin, (20 * S_FINDER_DURATION));
+							          break loop;
+							      }
+							    }
+							  }
+							}
+							if (found == false){
+								player.sendMessage("Sorry, "+ChatColor.RED+"no"+ChatColor.RESET+" spawners found");
+							}
+						}else{
+							player.sendMessage(ChatColor.RED+"Sorry, you do not have enough experience to use this item");
+						}
+					}else{
+						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
+						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
+						//event.setCancelled(true);
+					}
+				}
+			}
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGH)
@@ -348,14 +407,18 @@ public class RecipeHandler implements Listener{
 						int lootType;
 						if (lootPasses <= 0.65 && plugin.getConfig().getBoolean("Features.changeSpawners")){//65% for tempered egg
 							lootType = 1;
-						}else{//35% for mystery egg
+						}else if (lootPasses <= 0.7){//5% for spawner finder
 							lootType = 2;
+						}else{//30% for mystery egg
+							lootType = 3;
 						}
 						if (lootType == 1){
 							for (int i = 0; i < quantity; i++){
 								cInv.addItem(temperedEgg);
 							}
 						}else if (lootType == 2){
+							cInv.addItem(sFinder);
+						}else{
 							for (int i = 0; i < quantity; i++){
 								cInv.addItem(mysteryEgg);
 							}
