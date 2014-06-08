@@ -30,6 +30,12 @@ commands:
       permission: EnhancedSpawners.give-spawner
       permission-message: You don't have permission
       aliases: [givespawner, get-spawner, getspawner]
+   spawner-finder:
+      description: Gives you or a specified player a Spawner Finder
+      usage: /<command> <optional:player>
+      permission: EnhancedSpawners.spawner-finder
+      permission-message: You don't have permission
+      aliases: [spawnerfinder, find-spawner, findspawner]
 
 permissions:
    EnhancedSpawners.*:
@@ -45,3 +51,5 @@ permissions:
       description: Creates a mob spawner where you are looking at
    EnhancedSpawners.give-spawner:
       description: Gives you either the spawner you’re looking at, or the one you input
+   EnhancedSpawners.spawner-finder:
+      description: Gives you or a specified player a Spawner Finder

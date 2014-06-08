@@ -66,6 +66,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.addDefault("Options.mcstatsDataCollection", true);
 			config.addDefault("Options.mobBlacklist", true);
 			config.addDefault("Options.compassCleaner", true);
+			config.addDefault("Options.spawnerFinderRadius", 50);
 			config.addDefault("Options.setToDefault", false);
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
@@ -79,6 +80,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.set("Options.mcstatsDataCollection", true);
 			config.set("Options.mobBlacklist", true);
 			config.set("Options.compassCleaner", true);
+			config.set("Options.spawnerFinderRadius", 50);
 			config.set("Options.setToDefault", false);
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
@@ -95,7 +97,6 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		//Setting compasses to default
-		new RecipeHandler(this).debug(event.getPlayer());
 		if (config.getBoolean("Options.compassCleaner")){
 			event.getPlayer().setCompassTarget(event.getPlayer().getLocation().getWorld().getSpawnLocation());
 		}
@@ -228,6 +229,31 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 						}
 					}else{
 						sender.sendMessage(ChatColor.RED+"Error: You are not a player");
+					}
+				}
+				return true;
+			}else if (!(sender.hasPermission("give-spawner"))){
+				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
+				return true;
+			}else{
+				return false;
+			}
+		}else if (cmd.getName().equalsIgnoreCase("spawner-finder")){
+			if (sender.hasPermission("spawner-finder")){
+				if (args.length == 0){
+					if (sender instanceof Player){
+						new RecipeHandler(this).giveSpawnerFinder((Player) sender);
+					}else{
+						sender.sendMessage(ChatColor.RED+"Error: You are not a player");
+					}
+				}else if (args.length == 1){
+					Player player = Bukkit.getServer().getPlayer(args[0]);
+					if (player != null){
+						new RecipeHandler(this).giveSpawnerFinder(player);
+						sender.sendMessage("You have successfully given "+args[0]+" a Spawner Finder!");
+						player.sendMessage(sender.getName()+" has given you a Spawner Finder!");
+					}else{
+						sender.sendMessage(ChatColor.RED+"Error: '"+args[0]+"' is not a valid player");
 					}
 				}
 				return true;

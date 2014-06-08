@@ -48,7 +48,7 @@ public class RecipeHandler implements Listener{
 	ItemStack sFinder;
 	int S_FINDER_DURATION = 10;
 	int S_FINDER_COST = 5;
-	int S_FINDER_RADIUS = 20;
+	int S_FINDER_RADIUS;
 	EnhancedSpawners plugin;
 	LocationCalculator lC;
 	MobProperties mobs;
@@ -56,6 +56,7 @@ public class RecipeHandler implements Listener{
 	public RecipeHandler(EnhancedSpawners pluginN){//Inits items and events
 		pluginN.getServer().getPluginManager().registerEvents(this, pluginN);
 		plugin = pluginN;
+		S_FINDER_RADIUS = plugin.getConfig().getInt("Options.spawnerFinderRadius");
 		lC = new LocationCalculator();
 		mobs = new MobProperties(pluginN);
 		//Tempered Egg TODO make it unthrowable
@@ -191,7 +192,7 @@ public class RecipeHandler implements Listener{
 			}
 		}
 	}
-	public void debug(Player player){ //TODO DELETE
+	public void giveSpawnerFinder(Player player){
 		player.getInventory().addItem(sFinder);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -264,8 +265,8 @@ public class RecipeHandler implements Listener{
 					}
 				}
 			}
-			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getClickedBlock().getType() != Material.MOB_SPAWNER){
-				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
+			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.hasBlock()){
+				if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
 					Player player = event.getPlayer();
 					Location eLoc = event.getClickedBlock().getLocation().clone();
 					Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
@@ -311,6 +312,8 @@ public class RecipeHandler implements Listener{
 							    for (int z = -(S_FINDER_RADIUS); z <= S_FINDER_RADIUS; z ++) {
 							      if (block.getRelative(x,y,z).getType() == Material.MOB_SPAWNER){
 							          player.setCompassTarget(block.getRelative(x,y,z).getLocation().clone());
+							          player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.CLICK1, 0);
+							          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.CLICK, 10, 1);
 							          player.sendMessage("A spawner has been "+ChatColor.GREEN+"found"+ChatColor.RESET+"!");
 							          found = true;
 							          BukkitTask task = new CompassReset(player).runTaskLater(this.plugin, (20 * S_FINDER_DURATION));

@@ -11,6 +11,7 @@ public class CompassReset extends BukkitRunnable{
 	@Override
     public void run(){
 		player.setCompassTarget(player.getLocation().getWorld().getSpawnLocation());
+		player.sendMessage("Times up!");
 		this.cancel();
 	}
 }
