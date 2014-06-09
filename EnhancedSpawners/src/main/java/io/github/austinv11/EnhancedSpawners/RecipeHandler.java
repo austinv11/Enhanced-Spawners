@@ -139,7 +139,7 @@ public class RecipeHandler implements Listener{
 			BlockState state = event.getBlockPlaced().getState();
 			List<String> spawnerLore = new ArrayList<String>();
 			spawnerLore.add("It contains the spirit of a "+mobName);
-			if (event.getItemInHand().hasItemMeta()){
+			if (event.getItemInHand().hasItemMeta() && event.getItemInHand().getItemMeta().hasLore()){
 				List<String> tempLore = event.getItemInHand().getItemMeta().getLore();
 				if (tempLore.get(0).contains(spawnerLore.get(0))){
 					CreatureSpawner spawner = (CreatureSpawner) state;
@@ -294,44 +294,48 @@ public class RecipeHandler implements Listener{
 				}
 			}
 			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getType() == Material.COMPASS){
-				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Spawner Finder") && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
-					Player player = event.getPlayer();
-					List<String> sFinderLore = new ArrayList<String>();
-					sFinderLore.add("Right Click");
-					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
-					if (tempLore.get(0).contains(sFinderLore.get(0))){
-						if (player.getLevel() >= S_FINDER_COST || player.getGameMode() == GameMode.CREATIVE){
-							if (player.getGameMode() != GameMode.CREATIVE){
-								player.setLevel(player.getLevel() - S_FINDER_COST);
-							}
-							Block block = player.getLocation().clone().getBlock();
-							boolean found = false;
-							loop:
-							for (int x = -(S_FINDER_RADIUS); x <= S_FINDER_RADIUS; x ++){
-							  for (int y = -(S_FINDER_RADIUS); y <= S_FINDER_RADIUS; y ++) {
-							    for (int z = -(S_FINDER_RADIUS); z <= S_FINDER_RADIUS; z ++) {
-							      if (block.getRelative(x,y,z).getType() == Material.MOB_SPAWNER){
-							          player.setCompassTarget(block.getRelative(x,y,z).getLocation().clone());
-							          player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.CLICK1, 0);
-							          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.CLICK, 10, 1);
-							          player.sendMessage("A spawner has been "+ChatColor.GREEN+"found"+ChatColor.RESET+"!");
-							          found = true;
-							          BukkitTask task = new CompassReset(player).runTaskLater(this.plugin, (20 * S_FINDER_DURATION));
-							          break loop;
-							      }
-							    }
-							  }
-							}
-							if (found == false){
-								player.sendMessage("Sorry, "+ChatColor.RED+"no"+ChatColor.RESET+" spawners found");
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Spawner Finder")){
+					if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
+						Player player = event.getPlayer();
+						List<String> sFinderLore = new ArrayList<String>();
+						sFinderLore.add("Right Click");
+						List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+						if (tempLore.get(0).contains(sFinderLore.get(0))){
+							if (player.getLevel() >= S_FINDER_COST || player.getGameMode() == GameMode.CREATIVE){
+								if (player.getGameMode() != GameMode.CREATIVE){
+									player.setLevel(player.getLevel() - S_FINDER_COST);
+								}
+								Block block = player.getLocation().clone().getBlock();
+								boolean found = false;
+								loop:
+								for (int x = -(S_FINDER_RADIUS); x <= S_FINDER_RADIUS; x ++){
+								  for (int y = -(S_FINDER_RADIUS); y <= S_FINDER_RADIUS; y ++) {
+								    for (int z = -(S_FINDER_RADIUS); z <= S_FINDER_RADIUS; z ++) {
+								      if (block.getRelative(x,y,z).getType() == Material.MOB_SPAWNER){
+								          player.setCompassTarget(block.getRelative(x,y,z).getLocation().clone());
+								          player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.CLICK2, 0);
+								          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.SUCCESSFUL_HIT, 10, 1);
+								          player.sendMessage("A spawner has been "+ChatColor.GREEN+"found"+ChatColor.RESET+"!");
+								          found = true;
+								          BukkitTask task = new CompassReset(player).runTaskLater(this.plugin, (20 * S_FINDER_DURATION));
+								          break loop;
+								      }
+								    }
+								  }
+								}
+								if (found == false){
+									player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.POTION_BREAK, 0);
+							          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.ANVIL_BREAK, 10, 1);
+									player.sendMessage("Sorry, "+ChatColor.RED+"no"+ChatColor.RESET+" spawners found");
+								}
+							}else{
+								player.sendMessage(ChatColor.RED+"Sorry, you do not have enough experience to use this item");
 							}
 						}else{
-							player.sendMessage(ChatColor.RED+"Sorry, you do not have enough experience to use this item");
+							event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
+							event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
+							//event.setCancelled(true);
 						}
-					}else{
-						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
-						//event.setCancelled(true);
 					}
 				}
 			}
