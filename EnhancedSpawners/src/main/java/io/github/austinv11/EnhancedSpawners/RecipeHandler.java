@@ -324,8 +324,8 @@ public class RecipeHandler implements Listener{
 								  }
 								}
 								if (found == false){
-									player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.POTION_BREAK, 0);
-							          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.ANVIL_BREAK, 10, 1);
+									player.getLocation().clone().getWorld().playEffect(player.getLocation().clone(), Effect.MOBSPAWNER_FLAMES, 0);
+							          player.getLocation().clone().getWorld().playSound(player.getLocation().clone(), Sound.CHICKEN_EGG_POP, 10, 1);
 									player.sendMessage("Sorry, "+ChatColor.RED+"no"+ChatColor.RESET+" spawners found");
 								}
 							}else{
