@@ -293,9 +293,18 @@ public class RecipeHandler implements Listener{
 					}
 				}
 			}
+		}
+		if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().hasItemMeta()){
+			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getType() == Material.EGG){
+				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Infused Egg")){
+					if (event.getPlayer().getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY) == 1){
+						event.setCancelled(true);
+					}
+				}
+			}
 			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.getPlayer().getItemInHand().getType() == Material.COMPASS){
 				if (event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Spawner Finder")){
-					if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
+					if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK){
 						Player player = event.getPlayer();
 						List<String> sFinderLore = new ArrayList<String>();
 						sFinderLore.add("Right Click");
