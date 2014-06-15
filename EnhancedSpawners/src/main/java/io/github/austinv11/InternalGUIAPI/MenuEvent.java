@@ -41,8 +41,10 @@ public class MenuEvent extends Event{
 		return -1;
 	}
 	public String getButtonName(){//Returns the button name clicked on or null if cancelled
-		if (!cancelled){
-			return buttonItem.getItemMeta().getDisplayName();
+		if (!cancelled && buttonItem.hasItemMeta()){
+			if (buttonItem.getItemMeta().hasDisplayName()){
+				return buttonItem.getItemMeta().getDisplayName();
+			}
 		}
 		return null;
 	}
@@ -53,8 +55,10 @@ public class MenuEvent extends Event{
 		return null;
 	}
 	public List<String> getButtonDescription(){//Returns the given description to the clicked button or null if cancelled
-		if (!cancelled){
-			return buttonItem.getItemMeta().getLore();
+		if (!cancelled && buttonItem.hasItemMeta()){
+			if (buttonItem.getItemMeta().hasLore()){
+				return buttonItem.getItemMeta().getLore();
+			}
 		}
 		return null;
 	}
