@@ -257,7 +257,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 					}
 				}
 				return true;
-			}else if (!(sender.hasPermission("give-spawner"))){
+			}else if (!(sender.hasPermission("spawner-finder"))){
 				sender.sendMessage(ChatColor.RED+"Error: You need to be an OP to perform this command");
 				return true;
 			}else{
