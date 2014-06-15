@@ -1,5 +1,7 @@
 package io.github.austinv11.EnhancedSpawners;
 
+import io.github.austinv11.InternalGUIAPI.Menu;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -58,6 +60,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		mobs = new MobProperties(this);
 		locCalc = new LocationCalculator();
 		this.getServer().getPluginManager().registerEvents(this, this);
+		getLogger().info("Implementing internal version v"+Menu.getAPIVersion()+" of austinv11's GUIAPI");
 		getLogger().info("Spawners on this server are now enhanced by EnhancedSpawners v"+CURRENT_VERSION);
 	}
 	public void configInit(boolean revert){

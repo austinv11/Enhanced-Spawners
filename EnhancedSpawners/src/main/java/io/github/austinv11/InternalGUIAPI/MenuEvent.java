@@ -11,14 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class MenuEvent extends Event{
 	private static final HandlerList handlers = new HandlerList();
-	boolean cancelled;
-	int slot,numberKey;
-	ItemStack buttonItem;
-	Player player;
-	ClickType clickType;
-	Inventory menuInv;
-	//Menu menu;
-	public MenuEvent(int slot2, ItemStack buttonItem2, Player invPlayer, ClickType click, int numKey, Inventory menuInventory){
+	private boolean cancelled;
+	private int slot,numberKey;
+	private ItemStack buttonItem;
+	private Player player;
+	private ClickType clickType;
+	private Inventory menuInv;
+	private Menu menu;
+	public MenuEvent(int slot2, ItemStack buttonItem2, Player invPlayer, ClickType click, int numKey, Inventory menuInventory, Menu menu2){
 		slot = slot2;
 		buttonItem = buttonItem2;
 		player = invPlayer;
@@ -26,7 +26,7 @@ public class MenuEvent extends Event{
 		numberKey = numKey;
 		menuInv = menuInventory;
 		cancelled = false;
-		//MenuEvent.menu = menu;
+		menu = menu2;
 	}
 	public HandlerList getHandlers(){
 	    return handlers;
@@ -88,16 +88,16 @@ public class MenuEvent extends Event{
 		}
 		return null;
 	}
-	/*FIXME public Menu getMenu(){//Returns the menu object associated with this event or null if cancelled
+	public Menu getMenu(){//Returns the menu object associated with this event or null if cancelled
 		if (!cancelled){
 			return menu;
 		}
 		return null;
-	}*/
+	}
 	public boolean isCancelled(){//Returns whether the event is currently cancelled
 		return cancelled;
 	}
-	public void setCancelled(boolean cancel){//If cancelled, any returns made is set to null
+	public void setCancelled(boolean cancel){//If cancelled, any returns made is set to null and it doesn't toggle the button
 		cancelled = cancel;
 	}
 }
