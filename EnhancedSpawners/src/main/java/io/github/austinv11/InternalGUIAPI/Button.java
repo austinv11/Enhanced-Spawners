@@ -1,12 +1,30 @@
 package io.github.austinv11.InternalGUIAPI;
 
 import org.bukkit.inventory.ItemStack;
-
+/**
+ * <b>
+ * Button Object:
+ * </b>
+ * For internal use only!
+ */
 public class Button {
 	private ItemStack item, toggleItem;
 	private boolean isToggle, isToggled;
 	private int slot;
 	private Menu menu;
+	/**
+	 * Button object constructor.
+	 * <b>
+	 * FOR INTERNAL API USE ONLY, DO NOT USE
+	 * </b>
+	 * 
+	 * @param buttonMenu
+	 * @param itemDisplay
+	 * @param slot2
+	 * @param isTogglable
+	 * @param togglableItem
+	 * @param toggled
+	 */
 	public Button(Menu buttonMenu, ItemStack itemDisplay, int slot2, boolean isTogglable, ItemStack togglableItem, boolean toggled){
 		item = itemDisplay;
 		isToggle = isTogglable;
