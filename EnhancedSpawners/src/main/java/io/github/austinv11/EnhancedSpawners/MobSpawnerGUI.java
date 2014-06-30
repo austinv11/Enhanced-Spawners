@@ -44,14 +44,16 @@ public class MobSpawnerGUI implements Listener{
 				spawner.setSpawnedType(mobs.getAlias(name));
 			}
 			spawner.update();
+			menu.closeMenu();//FIXME
+			player.sendMessage(ChatColor.GOLD+"Successfully changed spawner type!");
 		}
 	}
 	private static ItemStack getMobEgg(int entityID){
 		ItemStack egg = new ItemStack(Material.MONSTER_EGG);
 		egg.setDurability((short) entityID);
-		ItemMeta meta = egg.getItemMeta();
-		meta.setDisplayName(ChatColor.RESET+"Spawn "+EntityType.fromId(entityID).toString()+"s");//FIXME
-		egg.setItemMeta(meta);
+		//ItemMeta meta = egg.getItemMeta();
+		//meta.setDisplayName(ChatColor.RESET+"Spawn "+EntityType.fromId(entityID).toString()+"s");//FIXME
+		//egg.setItemMeta(meta);
 		return egg;
 	}
 }

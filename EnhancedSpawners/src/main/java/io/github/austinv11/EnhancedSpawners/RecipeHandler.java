@@ -197,7 +197,7 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
-		if (event.getPlayer().getItemInHand() == null && event.getPlayer().hasPermission("EnhancedSpawners.canChangeSpawners") && event.getClickedBlock() != null){
+		if ((event.getPlayer().getItemInHand().getType() == Material.AIR || event.getPlayer().getItemInHand() == null) && event.getPlayer().hasPermission("EnhancedSpawners.canChangeSpawners") && event.getClickedBlock() != null){
 			if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getAction() == Action.RIGHT_CLICK_BLOCK){
 				new MobSpawnerGUI(event.getClickedBlock(), event.getPlayer());
 			}
