@@ -21,14 +21,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  *
  */
 public class Menu implements Listener{
-	private static String currentAPIVersion = Bukkit.getPluginManager().getPlugin("GUIAPI").getDescription().getVersion();
+	private static String currentAPIVersion = "1.0.2";
 	private Inventory inv;
 	private Player player;
 	private boolean isOpen = false;
 	private boolean buttonStatus[];
 	private Button buttons[];
 	private int slotCount = 0;
-	private static Plugin api = Bukkit.getPluginManager().getPlugin("GUIAPI");
+	private static Plugin api = Bukkit.getPluginManager().getPlugin("EnhancedSpawners");
 	/**
 	 * Menu object constructor.
 	 * @param p Player involved with this menu.

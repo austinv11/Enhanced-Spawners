@@ -53,3 +53,5 @@ permissions:
       description: Gives you either the spawner you’re looking at, or the one you input
    EnhancedSpawners.spawner-finder:
       description: Gives you or a specified player a Spawner Finder
+   EnhancedSpawners.canChangeSpawners:
+      description: Allows for changing spawners via a GUI

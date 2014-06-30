@@ -197,6 +197,11 @@ public class RecipeHandler implements Listener{
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event){
+		if (event.getPlayer().getItemInHand() == null && event.getPlayer().hasPermission("EnhancedSpawners.canChangeSpawners") && event.getClickedBlock() != null){
+			if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+				new MobSpawnerGUI(event.getClickedBlock(), event.getPlayer());
+			}
+		}
 		if (event.getPlayer().getItemInHand() != null && event.getClickedBlock() != null && event.getPlayer().getItemInHand().hasItemMeta()){
 			if (plugin.getConfig().getBoolean("Features.changeSpawners") == true && event.getPlayer().getItemInHand().getItemMeta().hasDisplayName()){
 				if (event.getClickedBlock().getType() == Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG){
