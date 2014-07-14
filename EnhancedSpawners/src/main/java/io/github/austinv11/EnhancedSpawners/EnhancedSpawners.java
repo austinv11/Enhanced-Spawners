@@ -48,6 +48,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			}
 		}
 		new RecipeHandler(this);
+		new InventoryGlitchTweaker(this);
 		if (config.getBoolean("Options.mcstatsDataCollection") == true){
 			try {
 			    MetricsLite metrics = new MetricsLite(this);
