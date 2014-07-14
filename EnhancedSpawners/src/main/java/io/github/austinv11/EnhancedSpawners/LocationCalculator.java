@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 //Yes, this code is taken from my pickaxetweak plugin
@@ -34,22 +33,22 @@ public class LocationCalculator {
 		}
 	}
 	public Location spawnerSearch(Location loc){
-		for (int i = 0; i <= 4; i++){ //Y
-			for (int j = 0; j <= 10; j++){ //Z
-				for (int k = 0; k <= 10; k++){ //X
-					double x, y, z;
-					x = loc.getX();
-					y = loc.getY();
-					z = loc.getZ();
-					Location tempLoc = loc.clone();
-					tempLoc.setX(x + k);
-					tempLoc.setY(y + i);
-					tempLoc.setZ(z + j);
-					if (tempLoc.getBlock().getType() == Material.MOB_SPAWNER){
-						return tempLoc;
-					}
-				}
-			}
+		for (int x = -10; x <= 10; x ++){
+		  for (int y = -4; y <= 4; y ++) {
+		    for (int z = -10; z <= 10; z ++) {
+		    	double k, i, j;
+				k = loc.getX();
+				i = loc.getY();
+				j = loc.getZ();
+				Location tempLoc = loc.clone();
+				tempLoc.setX(x + k);
+				tempLoc.setY(y + i);
+				tempLoc.setZ(z + j);
+				if (tempLoc.getBlock().getType() == Material.MOB_SPAWNER){
+					return tempLoc;
+		      }
+		    }
+		  }
 		}
 		return null;
 	}
