@@ -270,33 +270,37 @@ public class RecipeHandler implements Listener{
 					}
 				}
 			}
-			if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.hasBlock()){
-				if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
-					Player player = event.getPlayer();
-					Location eLoc = event.getClickedBlock().getLocation().clone();
-					Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
-					int amount = player.getItemInHand().getAmount();
-					List<String> mysteryLore = new ArrayList<String>();
-					mysteryLore.add("...It's a mystery");
-					List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
-					if (tempLore.get(0).contains(mysteryLore.get(0))){
-						if (mobLoc != null){
-							spawnRandom(mobLoc);
-							mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
-							mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
-							if (amount == 1){
-								ItemStack clear = new ItemStack (Material.AIR);
-								player.setItemInHand(clear);
-							}else{
-								player.getItemInHand().setAmount(amount-1);
+			try{
+				if (event.getPlayer().getItemInHand().getItemMeta().hasDisplayName() && event.hasBlock()){
+					if (event.getClickedBlock().getType() != Material.MOB_SPAWNER && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().contains("Attuned Egg (") && event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG && event.getPlayer().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("Attuned Egg (Mystery)")){
+						Player player = event.getPlayer();
+						Location eLoc = event.getClickedBlock().getLocation().clone();
+						Location mobLoc = lC.getLoc(event.getBlockFace(), eLoc);
+						int amount = player.getItemInHand().getAmount();
+						List<String> mysteryLore = new ArrayList<String>();
+						mysteryLore.add("...It's a mystery");
+						List<String> tempLore = player.getItemInHand().getItemMeta().getLore();
+						if (tempLore.get(0).contains(mysteryLore.get(0))){
+							if (mobLoc != null){
+								spawnRandom(mobLoc);
+								mobLoc.getWorld().playSound(mobLoc, Sound.ENDERMAN_TELEPORT, 10, 1);//TODO change sound
+								mobLoc.getWorld().playEffect(mobLoc, Effect.ENDER_SIGNAL, 0);
+								if (amount == 1){
+									ItemStack clear = new ItemStack (Material.AIR);
+									player.setItemInHand(clear);
+								}else{
+									player.getItemInHand().setAmount(amount-1);
+								}
 							}
+						}else{
+							event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
+							event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
+							//event.setCancelled(true);
 						}
-					}else{
-						event.getPlayer().sendMessage(ChatColor.RED+"Hey! That won't work ya "+ChatColor.AQUA+"CHEATER!");
-						event.getPlayer().sendMessage("(If this was an error, please tell a server admin to submit a bug report on the EnhancedSpawners issue tracker)");
-						//event.setCancelled(true);
 					}
 				}
+			}catch (NullPointerException e){
+				e.printStackTrace();
 			}
 		}
 		if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().hasItemMeta()){
