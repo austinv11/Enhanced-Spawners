@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class EnhancedSpawners extends JavaPlugin implements Listener{
 	String CURRENT_VERSION = this.getDescription().getVersion();
-	String CURRENT_GAME_VERSION = "CB 1.7.2-R0.3";
+	String CURRENT_GAME_VERSION = Bukkit.getBukkitVersion();
 	FileConfiguration config = getConfig();
 	FileHandler fileHandler;
 	File loginLogger = new File(getDataFolder(), "Data//loginTracker.yml");
