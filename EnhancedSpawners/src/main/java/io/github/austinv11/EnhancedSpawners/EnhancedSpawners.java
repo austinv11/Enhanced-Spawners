@@ -71,6 +71,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.addDefault("Options.mobBlacklist", true);
 			config.addDefault("Options.compassCleaner", true);
 			config.addDefault("Options.spawnerFinderRadius", 50);
+			config.addDefault("Options.firstLoginMessage", true);
 			config.addDefault("Options.setToDefault", false);
 			config.addDefault("Features.changeSpawners", true);
 			config.addDefault("Features.silkTouchSpawners", true);
@@ -85,6 +86,7 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 			config.set("Options.mobBlacklist", true);
 			config.set("Options.compassCleaner", true);
 			config.set("Options.spawnerFinderRadius", 50);
+			config.set("Options.firstLoginMessage", true);
 			config.set("Options.setToDefault", false);
 			config.set("Features.changeSpawners", true);
 			config.set("Features.silkTouchSpawners", true);
@@ -104,11 +106,13 @@ public class EnhancedSpawners extends JavaPlugin implements Listener{
 		if (config.getBoolean("Options.compassCleaner")){
 			event.getPlayer().setCompassTarget(event.getPlayer().getLocation().getWorld().getSpawnLocation());
 		}
-		boolean result = fileHandler.getBoolean(loginLogger, "firstTime."+event.getPlayer().getName());
-		if (result != true){
-			fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), true);
-			event.getPlayer().sendMessage("Welcome to the server!") ;
-			event.getPlayer().sendMessage("This server has"+ChatColor.GOLD+" EnhancedSpawners"+ChatColor.RESET+" installed! Visit "+ChatColor.BLUE+"http://bit.ly/1kN4UZO "+ChatColor.RESET+"for info about it.");
+		if (config.getBoolean("Options.firstLoginMessage")){
+			boolean result = fileHandler.getBoolean(loginLogger, "firstTime."+event.getPlayer().getName());
+			if (result != true){
+				fileHandler.set(loginLogger, "firstTime."+event.getPlayer().getName(), true);
+				event.getPlayer().sendMessage("Welcome to the server!") ;
+				event.getPlayer().sendMessage("This server has"+ChatColor.GOLD+" EnhancedSpawners"+ChatColor.RESET+" installed! Visit "+ChatColor.BLUE+"http://bit.ly/1kN4UZO "+ChatColor.RESET+"for info about it.");
+			}
 		}
 	}
 	@SuppressWarnings("deprecation")
