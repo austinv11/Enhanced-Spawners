@@ -39,7 +39,7 @@ commands:
 
 permissions:
    EnhancedSpawners.*:
-        description: Gives access to all EnhancedSpawners commands
+      description: Gives access to all EnhancedSpawners commands
    EnhancedSpawners.set-delay:
       description: Sets the delay of the spawner you are looking at
    EnhancedSpawners.set-mob:
